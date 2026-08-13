@@ -34,4 +34,4 @@ npm run build
 
 ## Render
 
-O `render.yaml` cria somente o serviço Next.js. Informe `INTERNAL_API_URL` e `NEXT_PUBLIC_SITE_URL` durante a criação do Blueprint. O health check público é `/saude`.
+O `render.yaml` cria somente o serviço Next.js. Informe `INTERNAL_API_URL` e `NEXT_PUBLIC_SITE_URL` durante a criação do Blueprint. O build usa `npm ci --include=dev` porque TypeScript, ESLint e os tipos são necessários durante a compilação mesmo com `NODE_ENV=production`. O health check público é `/saude`.
