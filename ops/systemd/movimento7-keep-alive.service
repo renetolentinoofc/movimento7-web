@@ -1,0 +1,14 @@
+[Unit]
+Description=Monitor de disponibilidade do Movimento 7
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/renetr/Projetos/movimento7-web
+ExecStart=/usr/bin/python3 -u /home/renetr/Projetos/movimento7-web/scripts/keep_alive.py --interval 40 --timeout 30
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

@@ -22,3 +22,4 @@ uploads/
 instance/
 *.tsbuildinfo
 references/generated/
+.keep-alive/
