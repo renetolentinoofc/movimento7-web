@@ -4,12 +4,16 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
+  adminChangePasswordSchema,
   apiErrorMessage,
   readApiEnvelope,
+  validationFieldErrors,
+  type AdminFieldErrors,
   type AdminSessionData,
 } from "@/lib/admin-auth";
 
 import styles from "./admin-auth-form.module.css";
+import { PasswordField } from "./password-field";
 
 type ChangePasswordData = {
   changed: boolean;
@@ -22,7 +26,7 @@ export function AdminChangePassword() {
   const [loadingSession, setLoadingSession] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+  const [fieldErrors, setFieldErrors] = useState<AdminFieldErrors>({});
 
   useEffect(() => {
     const controller = new AbortController();
@@ -37,7 +41,7 @@ export function AdminChangePassword() {
         const payload = await readApiEnvelope<AdminSessionData>(response);
 
         if (response.status === 401) {
-          router.replace("/admin/login");
+          router.replace("/painel/login");
           return;
         }
         if (!response.ok || !payload?.data?.csrf_token) {
@@ -59,18 +63,27 @@ export function AdminChangePassword() {
     return () => controller.abort();
   }, [router]);
 
+  function focusField(errors: AdminFieldErrors) {
+    const firstField = Object.keys(errors)[0];
+    if (firstField) document.getElementById(firstField.replaceAll("_", "-"))?.focus();
+  }
+
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setFieldErrors({});
 
     const form = new FormData(event.currentTarget);
-    const currentPassword = String(form.get("current_password") ?? "");
-    const newPassword = String(form.get("new_password") ?? "");
-    const confirmation = String(form.get("password_confirmation") ?? "");
+    const parsed = adminChangePasswordSchema.safeParse({
+      current_password: String(form.get("current_password") ?? ""),
+      new_password: String(form.get("new_password") ?? ""),
+      password_confirmation: String(form.get("password_confirmation") ?? ""),
+    });
 
-    if (newPassword !== confirmation) {
-      setFieldErrors({ password_confirmation: ["As novas senhas não conferem."] });
+    if (!parsed.success) {
+      const errors = validationFieldErrors(parsed.error);
+      setFieldErrors(errors);
+      focusField(errors);
       return;
     }
 
@@ -84,23 +97,29 @@ export function AdminChangePassword() {
           "X-CSRF-Token": csrfToken,
         },
         body: JSON.stringify({
-          current_password: currentPassword,
-          new_password: newPassword,
+          current_password: parsed.data.current_password,
+          new_password: parsed.data.new_password,
         }),
       });
       const payload = await readApiEnvelope<ChangePasswordData>(response);
 
       if (response.status === 401) {
-        router.replace("/admin/login");
+        router.replace("/painel/login");
         return;
       }
       if (!response.ok || !payload?.data?.changed) {
+        const serverFields = payload?.error?.fields ?? {};
+        const normalizedFields =
+          payload?.error?.code === "invalid_password" && !serverFields.current_password
+            ? { ...serverFields, current_password: ["A senha atual não confere."] }
+            : serverFields;
         setError(apiErrorMessage(payload, "Não foi possível trocar a senha."));
-        setFieldErrors(payload?.error?.fields ?? {});
+        setFieldErrors(normalizedFields);
+        focusField(normalizedFields);
         return;
       }
 
-      router.replace("/admin/login?status=password-changed");
+      router.replace("/painel/login?status=password-changed");
       router.refresh();
     } catch {
       setError("Não foi possível conectar ao serviço de autenticação.");
@@ -113,67 +132,39 @@ export function AdminChangePassword() {
 
   return (
     <div className={styles.panel}>
-      <form className={styles.form} onSubmit={submit}>
+      <form className={styles.form} onSubmit={submit} noValidate>
         {error ? (
           <div className={styles.error} role="alert">
             {error}
           </div>
         ) : null}
-        <div className={styles.field}>
-          <label htmlFor="current-password">Senha atual</label>
-          <input
-            id="current-password"
-            name="current_password"
-            type="password"
-            required
-            autoComplete="current-password"
-          />
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="new-password">Nova senha</label>
-          <input
-            id="new-password"
-            name="new_password"
-            type="password"
-            required
-            minLength={12}
-            autoComplete="new-password"
-            aria-describedby={
-              fieldErrors.new_password
-                ? "new-password-hint new-password-error"
-                : "new-password-hint"
-            }
-            aria-invalid={fieldErrors.new_password ? "true" : undefined}
-          />
-          <p className={styles.hint} id="new-password-hint">
-            Use pelo menos 12 caracteres e uma senha diferente da atual.
-          </p>
-          {fieldErrors.new_password ? (
-            <p className={styles.error} id="new-password-error">
-              {fieldErrors.new_password.join(" ")}
-            </p>
-          ) : null}
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="password-confirmation">Confirme a nova senha</label>
-          <input
-            id="password-confirmation"
-            name="password_confirmation"
-            type="password"
-            required
-            minLength={12}
-            autoComplete="new-password"
-            aria-describedby={
-              fieldErrors.password_confirmation ? "password-confirmation-error" : undefined
-            }
-            aria-invalid={fieldErrors.password_confirmation ? "true" : undefined}
-          />
-          {fieldErrors.password_confirmation ? (
-            <p className={styles.error} id="password-confirmation-error" role="alert">
-              {fieldErrors.password_confirmation.join(" ")}
-            </p>
-          ) : null}
-        </div>
+        <PasswordField
+          id="current-password"
+          name="current_password"
+          label="Senha atual"
+          required
+          autoComplete="current-password"
+          error={fieldErrors.current_password?.[0]}
+        />
+        <PasswordField
+          id="new-password"
+          name="new_password"
+          label="Nova senha"
+          required
+          minLength={12}
+          autoComplete="new-password"
+          hint="Use pelo menos 12 caracteres e uma senha diferente da atual."
+          error={fieldErrors.new_password?.[0]}
+        />
+        <PasswordField
+          id="password-confirmation"
+          name="password_confirmation"
+          label="Confirme a nova senha"
+          required
+          minLength={12}
+          autoComplete="new-password"
+          error={fieldErrors.password_confirmation?.[0]}
+        />
         <div className={styles.actions}>
           <button className="button" disabled={submitting || !csrfToken} type="submit">
             {submitting ? "ALTERANDO…" : "ALTERAR SENHA"}

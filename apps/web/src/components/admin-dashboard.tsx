@@ -29,11 +29,11 @@ export function AdminDashboard() {
         const payload = await readApiEnvelope<Data>(response);
 
         if (response.status === 401) {
-          router.replace("/admin/login");
+          router.replace("/painel/login");
           return;
         }
         if (response.status === 403 && payload?.error?.code === "password_change_required") {
-          router.replace("/admin/trocar-senha");
+          router.replace("/painel/trocar-senha");
           return;
         }
         if (response.ok && payload?.data) {
@@ -54,7 +54,7 @@ export function AdminDashboard() {
   if (error) {
     return (
       <div className="error-summary" role="alert">
-        {error} <Link href="/admin/login">Entrar</Link>
+        {error} <Link href="/painel/login">Entrar</Link>
       </div>
     );
   }

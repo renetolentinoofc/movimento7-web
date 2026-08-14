@@ -1,0 +1,72 @@
+export const PANEL_MODULES = [
+  { slug: "", label: "Visão geral" },
+  { slug: "trocar-senha", label: "Trocar senha" },
+  { slug: "inscricoes", label: "Inscrições" },
+  { slug: "perfis", label: "Perfis" },
+  { slug: "edicoes", label: "Edições" },
+  { slug: "loja", label: "Loja" },
+  { slug: "leilao", label: "Leilão" },
+  { slug: "galeria", label: "Galeria" },
+  { slug: "parceiros", label: "Parceiros" },
+  { slug: "conteudo", label: "Conteúdo" },
+  { slug: "comunicacao", label: "Comunicação" },
+  { slug: "usuarios", label: "Usuários" },
+  { slug: "auditoria", label: "Auditoria" },
+  { slug: "privacidade", label: "Privacidade" },
+  { slug: "sistema", label: "Sistema" },
+] as const;
+
+export const PANEL_MODULE_DETAILS: Record<string, { title: string; description: string }> = {
+  inscricoes: {
+    title: "Inscrições",
+    description: "Busca, filtros, prioridade, responsável, notas, histórico e status.",
+  },
+  perfis: {
+    title: "Perfis e artistas",
+    description: "Revisão de aprovados, portfólio e publicação sem copiar contatos privados.",
+  },
+  edicoes: {
+    title: "Edições e programação",
+    description: "Datas, local, capacidade e período de inscrições.",
+  },
+  loja: {
+    title: "Loja",
+    description: "Coleções, produtos, variantes, estoque, pedidos, pagamentos e entregas.",
+  },
+  leilao: {
+    title: "Leilão",
+    description: "Obras, lotes, lances, encerramento e cancelamento auditado.",
+  },
+  galeria: {
+    title: "Galeria",
+    description: "Upload, metadados, texto alternativo, ordem e reconciliação.",
+  },
+  parceiros: {
+    title: "Parceiros",
+    description: "Período, edição, nível, ordem e visibilidade.",
+  },
+  conteudo: {
+    title: "Conteúdo",
+    description: "Rascunho, versão, preview, publicação e rollback.",
+  },
+  comunicacao: {
+    title: "Comunicação",
+    description: "Modelos e histórico; automação somente quando configurada.",
+  },
+  usuarios: {
+    title: "Usuários e permissões",
+    description: "Contas individuais e papéis de menor privilégio.",
+  },
+  auditoria: {
+    title: "Logs e auditoria",
+    description: "Eventos imutáveis, filtrados e sem dados pessoais completos.",
+  },
+  privacidade: {
+    title: "Privacidade",
+    description: "Retenção, solicitações LGPD, exportações e backup.",
+  },
+  sistema: {
+    title: "Sistema",
+    description: "Versão, commit, ambiente, banco e integrações sem segredos.",
+  },
+};

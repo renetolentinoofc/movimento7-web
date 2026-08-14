@@ -1,13 +1,20 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const LOGIN_PATH = "/admin/login";
+const LEGACY_PATH = "/admin";
+const LOGIN_PATH = "/painel/login";
 const SESSION_COOKIE = "m7_session";
 
 export function proxy(request: NextRequest) {
-  if (request.nextUrl.pathname === LOGIN_PATH) {
-    return NextResponse.next();
+  const { pathname } = request.nextUrl;
+
+  if (pathname === LEGACY_PATH || pathname.startsWith(`${LEGACY_PATH}/`)) {
+    const destination = request.nextUrl.clone();
+    destination.pathname = `/painel${pathname.slice(LEGACY_PATH.length)}`;
+    return NextResponse.redirect(destination, 308);
   }
+
+  if (pathname === LOGIN_PATH) return NextResponse.next();
 
   if (!request.cookies.get(SESSION_COOKIE)?.value) {
     return NextResponse.redirect(new URL(LOGIN_PATH, request.url));
@@ -17,5 +24,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/painel/:path*"],
 };

@@ -35,12 +35,12 @@ uma senha existente.
 
 ## Fluxo pela interface
 
-1. Abra `https://movimento7.com.br/admin`.
-2. Sem cookie de sessão, a aplicação redireciona para `/admin/login`.
+1. Abra `https://movimento7.com.br/painel`.
+2. Sem cookie de sessão, a aplicação redireciona para `/painel/login`.
 3. Entre com `admin@movimento7.com` e com o valor configurado em
    `INITIAL_ADMIN_PASSWORD` no primeiro seed.
 4. Uma conta marcada para primeiro acesso é enviada automaticamente a
-   `/admin/trocar-senha`.
+   `/painel/trocar-senha`.
 5. Informe a senha inicial e uma nova senha com 12 ou mais caracteres.
 6. A sessão é invalidada após a troca. Entre novamente com a nova senha.
 

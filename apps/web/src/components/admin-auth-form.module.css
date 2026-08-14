@@ -31,6 +31,39 @@
   color: var(--color-text);
 }
 
+.passwordControl {
+  position: relative;
+}
+
+.passwordControl input {
+  padding-inline-end: 3.75rem;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  width: 2.75rem;
+  min-height: 2.4rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.passwordToggle:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.passwordToggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 .field input:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
@@ -46,6 +79,12 @@
 .error {
   padding: var(--space-4);
   border-left: 0.35rem solid;
+}
+
+.fieldError {
+  margin: 0;
+  color: var(--color-error);
+  font-weight: 700;
 }
 
 .notice {

@@ -57,6 +57,8 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  if (pathname === "/painel" || pathname.startsWith("/painel/")) return null;
+
   return <header className={styles.header}>
     <div className={`container ${styles.bar}`}>
       <Link className={styles.brand} href="/" aria-label="Movimento 7 — início">

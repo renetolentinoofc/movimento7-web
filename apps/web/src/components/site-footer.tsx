@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./site-footer.module.css";
 
 const navigation = [
@@ -12,6 +15,9 @@ const navigation = [
 ];
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname === "/painel" || pathname.startsWith("/painel/")) return null;
+
   return <footer className={styles.footer}>
     <div className={`container ${styles.grid}`}>
       <div className={styles.about}>

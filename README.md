@@ -25,9 +25,11 @@ Nunca configure credenciais de banco, OAuth, senha administrativa ou `SECRET_KEY
 
 ## Painel administrativo
 
-As rotas sob `/admin` exigem o cookie de sessão `HttpOnly`. Uma visita sem sessão é redirecionada
-para `/admin/login`. No primeiro acesso, contas com troca obrigatória seguem para
-`/admin/trocar-senha`; a alteração usa o token CSRF da sessão e termina todas as sessões anteriores.
+As rotas sob `/painel` exigem o cookie de sessão `HttpOnly`. Uma visita sem sessão é redirecionada
+para `/painel/login`. No primeiro acesso, contas com troca obrigatória seguem para
+`/painel/trocar-senha`; a alteração usa o token CSRF da sessão e termina todas as sessões anteriores.
+As antigas URLs em `/admin` possuem redirecionamento permanente para a rota equivalente. Os links
+dos módulos usam `prefetch={false}`, carregando cada tela somente quando ela for solicitada.
 
 O usuário inicial padrão é `admin@movimento7.com`; sua senha não existe no frontend e deve ser
 definida com segurança no serviço da API. A configuração do primeiro usuário, o diagnóstico do
@@ -45,7 +47,9 @@ As imagens otimizadas da landing estão organizadas em:
 
 Produtos, disponibilidade, valores e lotes publicados são carregados no servidor a partir de `INTERNAL_API_URL`, com revalidação de 60 segundos. Quando a API não possui produtos ou lotes publicados, a home mostra somente uma prévia editorial sem preço, estoque, data ou lance fictício; os CTAs continuam apontando para `/loja` e `/leilao`. A lista local inicial garante a exibição dos logotipos fornecidos mesmo durante uma indisponibilidade da API; parceiros cadastrados são combinados com essa lista, substituem dados do mesmo `slug` e são preservados sem duplicação.
 
-O cabeçalho e o rodapé permanecem compartilhados por todas as rotas. As âncoras `#sobre` e `#programacao` são destinos reais da landing, enquanto inscrições, loja, leilão, contato, galeria e páginas legais usam as rotas existentes.
+O cabeçalho e o rodapé permanecem compartilhados pelas rotas públicas e não são montados no
+painel. As âncoras `#sobre` e `#programacao` são destinos reais da landing, enquanto inscrições,
+loja, leilão, contato, galeria e páginas legais usam as rotas existentes.
 
 ## Verificação
 
@@ -55,6 +59,10 @@ npm run typecheck
 npm run test:web
 npm run build
 ```
+
+O workflow `.github/workflows/frontend-ci.yml` executa essa mesma sequência em pushes e pull
+requests. O fluxo técnico e os achados da revisão do painel estão documentados em
+`docs/RELATORIO_REVISAO_PAINEL.md`.
 
 ## Render
 

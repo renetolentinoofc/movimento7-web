@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
     // memory-constrained instances.
     preloadEntriesOnStart: false
   },
+  async redirects() {
+    return [
+      { source: "/admin", destination: "/painel", permanent: true },
+      { source: "/admin/:path*", destination: "/painel/:path*", permanent: true }
+    ];
+  },
   async rewrites() {
     return [{ source: "/api/v1/:path*", destination: `${apiOrigin}/api/v1/:path*` }];
   },

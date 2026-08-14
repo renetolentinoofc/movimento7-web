@@ -53,7 +53,7 @@ describe("autenticação administrativa", () => {
     await user.type(screen.getByLabelText("Senha"), "senha-inicial-segura");
     await user.click(screen.getByRole("button", { name: "ENTRAR" }));
 
-    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/admin/trocar-senha"));
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/painel/trocar-senha"));
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/v1/admin/auth/login",
       expect.objectContaining({ credentials: "include", method: "POST" }),
@@ -80,7 +80,7 @@ describe("autenticação administrativa", () => {
     await user.click(screen.getByRole("button", { name: "ALTERAR SENHA" }));
 
     await waitFor(() =>
-      expect(router.replace).toHaveBeenCalledWith("/admin/login?status=password-changed"),
+      expect(router.replace).toHaveBeenCalledWith("/painel/login?status=password-changed"),
     );
     expect(fetchMock).toHaveBeenLastCalledWith(
       "/api/v1/admin/auth/change-password",
@@ -103,6 +103,88 @@ describe("autenticação administrativa", () => {
 
     render(<AdminDashboard />);
 
-    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/admin/trocar-senha"));
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/painel/trocar-senha"));
+  });
+
+  it("não envia senhas inválidas e informa quando a nova repete a atual", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValueOnce(apiResponse(200, sessionData));
+    const user = userEvent.setup();
+
+    render(<AdminChangePassword />);
+    await screen.findByLabelText("Senha atual");
+    await user.type(screen.getByLabelText("Senha atual"), "mesma-senha-segura");
+    await user.type(screen.getByLabelText("Nova senha"), "mesma-senha-segura");
+    await user.type(screen.getByLabelText("Confirme a nova senha"), "mesma-senha-segura");
+    await user.click(screen.getByRole("button", { name: "ALTERAR SENHA" }));
+
+    expect(
+      await screen.findByText("A nova senha deve ser diferente da senha atual."),
+    ).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(screen.getByLabelText("Nova senha")).toHaveFocus();
+  });
+
+  it("bloqueia senha curta e confirmação diferente antes de chamar a API", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock.mockResolvedValueOnce(apiResponse(200, sessionData));
+    const user = userEvent.setup();
+
+    render(<AdminChangePassword />);
+    await screen.findByLabelText("Senha atual");
+    await user.type(screen.getByLabelText("Senha atual"), "senha-atual-bem-segura");
+    await user.type(screen.getByLabelText("Nova senha"), "curta");
+    await user.type(screen.getByLabelText("Confirme a nova senha"), "outra-senha-segura");
+    await user.click(screen.getByRole("button", { name: "ALTERAR SENHA" }));
+
+    expect(
+      await screen.findByText("A nova senha precisa ter 12 ou mais caracteres."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("As novas senhas não conferem.")).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(screen.getByLabelText("Nova senha")).toHaveFocus();
+  });
+
+  it("associa o erro de senha atual devolvido pela API ao campo correto", async () => {
+    const fetchMock = vi.mocked(fetch);
+    fetchMock
+      .mockResolvedValueOnce(apiResponse(200, sessionData))
+      .mockResolvedValueOnce(
+        apiResponse(403, null, {
+          code: "invalid_password",
+          message: "Não foi possível alterar a senha.",
+          fields: {},
+        }),
+      );
+    const user = userEvent.setup();
+
+    render(<AdminChangePassword />);
+    await screen.findByLabelText("Senha atual");
+    await user.type(screen.getByLabelText("Senha atual"), "senha-atual-incorreta");
+    await user.type(screen.getByLabelText("Nova senha"), "nova-senha-bem-segura");
+    await user.type(
+      screen.getByLabelText("Confirme a nova senha"),
+      "nova-senha-bem-segura",
+    );
+    await user.click(screen.getByRole("button", { name: "ALTERAR SENHA" }));
+
+    expect(await screen.findByText("A senha atual não confere.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Senha atual")).toHaveFocus();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("permite mostrar e ocultar as senhas sem enviar o formulário", async () => {
+    const user = userEvent.setup();
+
+    render(<AdminLogin />);
+    const password = screen.getByLabelText("Senha");
+    expect(password).toHaveAttribute("type", "password");
+
+    await user.click(screen.getByRole("button", { name: "Mostrar senha" }));
+    expect(password).toHaveAttribute("type", "text");
+    expect(fetch).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Ocultar senha" }));
+    expect(password).toHaveAttribute("type", "password");
   });
 });

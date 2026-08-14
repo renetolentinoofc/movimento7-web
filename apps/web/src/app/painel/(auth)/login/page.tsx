@@ -4,7 +4,7 @@ type LoginPageProps = {
   searchParams: Promise<{ status?: string | string[] }>;
 };
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
+export default async function PanelLoginPage({ searchParams }: LoginPageProps) {
   const status = (await searchParams).status;
 
   return (
