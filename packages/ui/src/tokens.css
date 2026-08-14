@@ -1,4 +1,14 @@
 :root {
+  --mov7-ink: #071313;
+  --mov7-deep: #071c1c;
+  --mov7-green: #075e57;
+  --mov7-teal: #02a9ab;
+  --mov7-lime: #72d94f;
+  --mov7-yellow: #ffc53d;
+  --mov7-orange: #f36f21;
+  --mov7-purple: #7a35bd;
+  --mov7-paper: #f2f4f2;
+  --mov7-white: #ffffff;
   --color-bg: #080a12;
   --color-bg-deep: #03040a;
   --color-surface: #111522;

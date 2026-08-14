@@ -23,6 +23,20 @@ Acesse `http://localhost:3000`.
 
 Nunca configure credenciais de banco, OAuth, senha administrativa ou `SECRET_KEY` neste serviço.
 
+## Landing page
+
+A página inicial é montada em `apps/web/src/components/home`. Cada bloco possui uma responsabilidade própria (apresentação, programação, Rima Viva, produtos, leilão e parceiros), com estilos compartilhados em `home.module.css`. Os tokens específicos da identidade Movimento 7 ficam em `packages/ui/src/tokens.css`.
+
+As imagens otimizadas da landing estão organizadas em:
+
+- `apps/web/public/assets/images/home`;
+- `apps/web/public/assets/images/products`;
+- `apps/web/public/assets/images/partners`.
+
+Produtos, disponibilidade, valores e lotes publicados são carregados no servidor a partir de `INTERNAL_API_URL`, com revalidação de 60 segundos. Quando a API não possui produtos ou lotes publicados, a home mostra somente uma prévia editorial sem preço, estoque, data ou lance fictício; os CTAs continuam apontando para `/loja` e `/leilao`. A lista local inicial garante a exibição dos logotipos fornecidos mesmo durante uma indisponibilidade da API; parceiros cadastrados são combinados com essa lista, substituem dados do mesmo `slug` e são preservados sem duplicação.
+
+O cabeçalho e o rodapé permanecem compartilhados por todas as rotas. As âncoras `#sobre` e `#programacao` são destinos reais da landing, enquanto inscrições, loja, leilão, contato, galeria e páginas legais usam as rotas existentes.
+
 ## Verificação
 
 ```bash

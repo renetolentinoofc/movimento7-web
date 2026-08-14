@@ -8,8 +8,12 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./site-header.module.css";
 
 const links = [
-  ["/", "INÍCIO"], ["/quem-somos", "QUEM SOMOS"], ["/participe", "PARTICIPE"],
-  ["/loja", "LOJA"], ["/leilao", "LEILÃO"], ["/contato", "CONTATO"]
+  ["/", "INÍCIO"],
+  ["/#sobre", "SOBRE"],
+  ["/#programacao", "PROGRAMAÇÃO"],
+  ["/loja", "LOJA"],
+  ["/leilao", "LEILÃO"],
+  ["/contato", "CONTATO"]
 ];
 
 export function SiteHeader() {
@@ -17,26 +21,54 @@ export function SiteHeader() {
   const pathname = usePathname();
   const toggle = useRef<HTMLButtonElement>(null);
   const firstLink = useRef<HTMLAnchorElement>(null);
+  const nav = useRef<HTMLElement>(null);
+
   useEffect(() => {
-    if (open) firstLink.current?.focus();
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    firstLink.current?.focus();
+
     const close = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); }
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggle.current?.focus();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusable = nav.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+      if (!focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", close);
-    return () => document.removeEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("keydown", close);
+      document.body.style.overflow = previousOverflow;
+    };
   }, [open]);
+
   return <header className={styles.header}>
     <div className={`container ${styles.bar}`}>
       <Link className={styles.brand} href="/" aria-label="Movimento 7 — início">
-        <Image src="/brand/logo-movimento7.webp" alt="" width={640} height={640} priority sizes="54px" />
-        <span>MOVIMENTO 7</span>
+        <Image src="/brand/logo-movimento7.webp" alt="" width={640} height={640} priority sizes="72px" />
       </Link>
       <button ref={toggle} className={styles.toggle} type="button" aria-expanded={open} aria-controls="main-nav" aria-label={open ? "Fechar menu" : "Abrir menu"} onClick={() => setOpen(!open)}>
         {open ? <X aria-hidden /> : <Menu aria-hidden />}
       </button>
-      <nav id="main-nav" aria-label="Principal" className={`${styles.nav} ${open ? styles.open : ""}`}>
+      {open && <button className={styles.scrim} type="button" aria-label="Fechar menu" onClick={() => setOpen(false)} />}
+      <nav ref={nav} id="main-nav" aria-label="Principal" className={`${styles.nav} ${open ? styles.open : ""}`}>
         {links.map(([href, label], index) => <Link onClick={() => setOpen(false)} ref={index === 0 ? firstLink : undefined} key={href} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}
-        <Link onClick={() => setOpen(false)} className="button" href="/participe">INSCREVA-SE</Link>
+        <Link onClick={() => setOpen(false)} className={styles.cta} href="/participe">QUERO PARTICIPAR</Link>
       </nav>
     </div>
   </header>;

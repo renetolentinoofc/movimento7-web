@@ -1,14 +1,135 @@
-.header { position: sticky; z-index: 50; top: 0; border-bottom: 1px solid var(--color-border); background: rgb(8 10 18 / 94%); backdrop-filter: blur(12px); }
-.bar { min-height: 5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.brand { display: flex; align-items: center; gap: .75rem; font-weight: 900; text-decoration: none; }
-.brand img { width: 3.4rem; height: 3.4rem; object-fit: contain; }
-.nav { display: flex; align-items: center; gap: clamp(.7rem, 1.5vw, 1.4rem); }
-.nav a { font-size: .78rem; font-weight: 850; text-decoration: none; letter-spacing: .04em; }
-.nav a:hover { color: var(--color-yellow); }
-.toggle { display: none; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); padding: .6rem; }
+.header {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  background: linear-gradient(108deg, #079db8 0%, #13a792 53%, #70d74c 100%);
+  color: var(--mov7-ink);
+  box-shadow: 0 0.3rem 1.5rem rgb(0 0 0 / 16%);
+}
+
+.bar {
+  min-height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 4.8rem;
+  height: 4.8rem;
+  object-fit: contain;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.65rem, 1.25vw, 1.35rem);
+}
+
+.nav a {
+  position: relative;
+  padding-block: 0.7rem;
+  color: var(--mov7-ink);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.055em;
+  text-decoration: none;
+}
+
+.nav a:not(.cta)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.35rem;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.nav a:hover::after,
+.nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+.cta {
+  min-height: 2.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.05rem !important;
+  border: 2px solid var(--mov7-ink);
+  border-radius: 0.2rem;
+  background: var(--mov7-yellow);
+  box-shadow: 0.25rem 0.25rem 0 var(--mov7-ink);
+  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+}
+
+.cta:hover {
+  transform: translate(0.15rem, 0.15rem);
+  box-shadow: 0.1rem 0.1rem 0 var(--mov7-ink);
+}
+
+.toggle {
+  min-width: 3rem;
+  min-height: 3rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--mov7-ink);
+  border-radius: 0.2rem;
+  background: var(--mov7-yellow);
+  color: var(--mov7-ink);
+}
+
+.scrim {
+  display: none;
+}
+
 @media (max-width: 900px) {
-  .toggle { display: inline-flex; }
-  .nav { position: fixed; inset: 5rem 0 auto; display: none; padding: 1.5rem; background: var(--color-bg-deep); border-bottom: 1px solid var(--color-border); flex-direction: column; align-items: stretch; }
+  .bar { min-height: 5.2rem; }
+  .brand img { width: 4rem; height: 4rem; }
+  .toggle { display: inline-flex; position: relative; z-index: 2; }
+  .scrim {
+    position: fixed;
+    z-index: -1;
+    inset: 5.2rem 0 0;
+    display: block;
+    width: 100%;
+    border: 0;
+    background: rgb(7 19 19 / 72%);
+  }
+  .nav {
+    position: fixed;
+    z-index: 1;
+    top: 5.2rem;
+    right: 0;
+    left: 0;
+    display: none;
+    max-height: calc(100dvh - 5.2rem);
+    padding: 1.25rem max(1rem, calc((100vw - var(--content-max)) / 2));
+    overflow-y: auto;
+    border-top: 1px solid rgb(7 19 19 / 20%);
+    background: linear-gradient(135deg, #0da49c, #70d74c);
+    box-shadow: 0 1.5rem 2.5rem rgb(0 0 0 / 25%);
+    flex-direction: column;
+    align-items: stretch;
+  }
   .nav.open { display: flex; }
-  .nav a { font-size: 1rem; padding: .65rem; }
+  .nav a { min-height: 3rem; padding: 0.8rem 0.65rem; font-size: 0.95rem; }
+  .nav .cta { margin-top: 0.35rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav a::after,
+  .cta { transition: none; }
 }
