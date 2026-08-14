@@ -34,4 +34,6 @@ npm run build
 
 ## Render
 
-O `render.yaml` cria somente o serviço Next.js. Informe `INTERNAL_API_URL` e `NEXT_PUBLIC_SITE_URL` durante a criação do Blueprint. O build usa `npm ci --include=dev` porque TypeScript, ESLint e os tipos são necessários durante a compilação mesmo com `NODE_ENV=production`. O health check público é `/saude`.
+O `render.yaml` cria somente o serviço Next.js. Informe `INTERNAL_API_URL` e `NEXT_PUBLIC_SITE_URL` durante a criação do Blueprint. O build usa `npm ci --include=dev` porque TypeScript, ESLint e os tipos são necessários durante a compilação mesmo com `NODE_ENV=production`. Configure o health check do Render como `/api/health`; esse endpoint é mínimo e não renderiza React nem consulta a API. A página `/saude` continua exibindo o estado integrado para visitantes.
+
+Não use um monitor externo a cada poucos segundos para impedir o repouso dos serviços Free. Dois serviços continuamente ativos ultrapassam a franquia mensal de 750 horas do workspace. Para disponibilidade contínua, use instâncias pagas e monitore a curva de memória na aba **Metrics** do Render.
