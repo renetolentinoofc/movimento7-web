@@ -8,7 +8,7 @@ export function Hero() {
     <div className={styles.heroCopy}>
       <div className={styles.heroCopyInner}>
         <p className={styles.kickerDark}>CULTURA, ARTE &amp; BELEZA</p>
-        <h1 id="hero-title">Um movimento<br />que transforma.</h1>
+        <h1 id="hero-title"><span>Um movimento</span><span>que transforma.</span></h1>
         <p>O Movimento 7 é uma plataforma de desenvolvimento cultural que conecta pessoas, revela talentos e cria oportunidades por meio da arte, da cultura urbana, da beleza e do empreendedorismo.</p>
         <div className={styles.heroActions}>
           <Link className={styles.buttonDark} href="#programacao">Conheça o festival <ArrowRight aria-hidden /></Link>

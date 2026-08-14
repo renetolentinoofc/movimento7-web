@@ -15,7 +15,7 @@ export function SiteFooter() {
   return <footer className={styles.footer}>
     <div className={`container ${styles.grid}`}>
       <div className={styles.about}>
-        <Image src="/brand/logo-movimento7.webp" alt="Movimento 7" width={640} height={640} sizes="112px" />
+        <Image src="/brand/logo-movimento7-horizontal.webp" alt="Movimento 7" width={900} height={422} sizes="176px" />
         <p>Uma plataforma de desenvolvimento cultural que conecta pessoas, revela talentos e cria oportunidades.</p>
       </div>
       <nav aria-label="Navegação do rodapé">

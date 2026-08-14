@@ -1,6 +1,7 @@
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { MediaImage } from "@/components/media-image";
 import { brl } from "@/lib/api";
 import type { HomeProduct } from "./home-data";
 import styles from "./home.module.css";
@@ -17,9 +18,7 @@ function ProductImage({ product, index }: { product: HomeProduct; index: number 
     const preview = previews[index % previews.length];
     return <Image src={preview.image} alt="" width={preview.width} height={preview.height} sizes="(max-width: 760px) 88vw, 27vw" />;
   }
-  // Media URLs are controlled and validated by the API/media provider.
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src={media.url} alt={media.alt || `Foto de ${product.name}`} width={media.width ?? 900} height={media.height ?? 1100} loading="lazy" />;
+  return <MediaImage src={media.url} alt={media.alt || `Foto de ${product.name}`} width={media.width ?? 900} height={media.height ?? 1100} sizes="(max-width: 760px) 88vw, 27vw" />;
 }
 
 export function FeaturedProducts({ products }: { products: HomeProduct[] }) {

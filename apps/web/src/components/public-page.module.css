@@ -1,0 +1,35 @@
+.contentSection {
+  padding-block: clamp(3rem, 6vw, 5.5rem);
+}
+
+.catalogGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-5);
+}
+
+.emptyState {
+  width: min(100%, 44rem);
+  margin-inline: auto;
+  padding: clamp(2rem, 5vw, 3.5rem);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.emptyState p {
+  max-width: 54ch;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+.supportLink {
+  width: fit-content;
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
+}
+
+.formContainer {
+  max-width: 62rem;
+}

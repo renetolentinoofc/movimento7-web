@@ -14,7 +14,7 @@ export function Partners({ partners }: { partners: HomePartner[] }) {
       <div className={styles.partnerGrid}>
         {partners.map((partner) => {
           const logo = <Image src={partner.logo_path} alt={partner.logo_alt || `Logo ${partner.name}`} width={520} height={520} sizes="(max-width: 560px) 42vw, 18vw" />;
-          return <div className={`${styles.partnerLogo} ${partner.slug === "garagem-dos-antigos" ? styles.darkLogo : ""}`} key={partner.slug}>
+          return <div data-partner={partner.slug} className={`${styles.partnerLogo} ${partner.slug === "garagem-dos-antigos" ? styles.darkLogo : ""}`} key={partner.slug}>
             {partner.website_url ? <a href={partner.website_url} rel="noopener noreferrer" target="_blank" aria-label={`${partner.name}, abre em nova aba`}>{logo}</a> : logo}
           </div>;
         })}

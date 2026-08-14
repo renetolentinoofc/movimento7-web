@@ -1,6 +1,7 @@
 import { ArrowRight, CalendarDays, Gavel } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { MediaImage } from "@/components/media-image";
 import { brl } from "@/lib/api";
 import type { HomeAuctionLot } from "./home-data";
 import styles from "./home.module.css";
@@ -25,8 +26,7 @@ export function AuctionHighlight({ lot }: { lot: HomeAuctionLot | null }) {
       <div className={styles.artworkWrap}>
         <span className={styles.artSpark} aria-hidden />
         {image
-          // eslint-disable-next-line @next/next/no-img-element
-          ? <img src={image.url} alt={image.alt || `Obra ${title}`} width="900" height="900" loading="lazy" />
+          ? <MediaImage src={image.url} alt={image.alt || `Obra ${title}`} width={900} height={900} sizes="(max-width: 760px) 86vw, 42vw" />
           : <Image src="/assets/images/home/arte-benvinda-de-carvalho.webp" alt="Obra de arte Benvinda de Carvalho" width={1200} height={1198} sizes="(max-width: 760px) 86vw, 42vw" />}
       </div>
       <div className={styles.auctionCopy}>

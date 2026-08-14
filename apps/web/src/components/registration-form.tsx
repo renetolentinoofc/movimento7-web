@@ -2,9 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { apiRequest } from "@/lib/api";
+import styles from "./public-form.module.css";
 
 const categories = [
   ["barbeiro", "Barbeiro"], ["mc", "MC"], ["artista", "Artista"], ["trancista", "Trancista"],
@@ -35,11 +36,11 @@ export function RegistrationForm() {
   const [result, setResult] = useState<Created | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const summary = useRef<HTMLDivElement>(null);
-  const { register, handleSubmit, setError, formState: { errors, isDirty, isSubmitting }, watch } = useForm<Values>({
+  const { register, handleSubmit, setError, control, formState: { errors, isDirty, isSubmitting } } = useForm<Values>({
     resolver: zodResolver(schema),
     defaultValues: { full_name: "", professional_name: "", phone: "", instagram: "", city: "", category: "", presentation: "", portfolio_url: "", privacy_accepted: false as true, website: "", save_draft: false }
   });
-  const saveDraft = watch("save_draft");
+  const saveDraft = useWatch({ control, name: "save_draft", defaultValue: false });
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => { if (isDirty && !result) event.preventDefault(); };
     window.addEventListener("beforeunload", warn);
@@ -63,7 +64,7 @@ export function RegistrationForm() {
     });
   }
 
-  const submit = handleSubmit(async values => {
+  async function submitValues(values: Values) {
     setServerError(null); setProgress(0);
     if (values.save_draft) sessionStorage.setItem("m7-registration-draft", JSON.stringify({ professional_name: values.professional_name, city: values.city, category: values.category }));
     const payload = await apiRequest<Created>("/api/v1/registrations", { method: "POST", body: JSON.stringify({ ...values, privacy_version: "2026-08-draft" }) });
@@ -75,21 +76,25 @@ export function RegistrationForm() {
     try { await upload(payload.data.protocol, payload.data.upload_token); }
     catch { setServerError("A inscrição foi salva, mas o arquivo não terminou de enviar. Guarde o protocolo e tente o contato."); }
     setResult(payload.data); sessionStorage.removeItem("m7-registration-draft");
-  }, () => summary.current?.focus());
+  }
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    void handleSubmit(submitValues, () => summary.current?.focus())(event);
+  }
 
   if (result) return <div className="success" role="status"><h2>Inscrição recebida</h2><p>Protocolo: <strong>{result.protocol}</strong></p><p>Categoria: {result.category}. Guarde este código para atendimento.</p>{progress > 0 && <p>Portfólio: {progress}% enviado.</p>}</div>;
-  return <form className="form" onSubmit={submit} noValidate>
+  return <form className={`form ${styles.form}`} onSubmit={submit} noValidate>
     {(serverError || Object.keys(errors).length > 0) && <div className="error-summary" role="alert" tabIndex={-1} ref={summary}><strong>Não foi possível enviar ainda.</strong><p>{serverError ?? "Revise os campos destacados."}</p></div>}
     <div className="field"><label htmlFor="full_name">Nome completo</label><input id="full_name" autoComplete="name" aria-invalid={!!errors.full_name} aria-describedby={errors.full_name ? "full_name-error" : undefined} {...register("full_name")} />{errors.full_name && <p className="error" id="full_name-error">{errors.full_name.message}</p>}</div>
     <div className="field"><label htmlFor="professional_name">Nome artístico ou profissional</label><input id="professional_name" {...register("professional_name")} /></div>
-    <div className="grid cards"><div className="field"><label htmlFor="phone">WhatsApp</label><input id="phone" inputMode="tel" autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : "phone-help"} {...register("phone")} /><small id="phone-help" className="muted">Inclua DDD. Ex.: (71) 99999-9999.</small>{errors.phone && <p className="error" id="phone-error">{errors.phone.message}</p>}</div><div className="field"><label htmlFor="instagram">Instagram</label><input id="instagram" autoCapitalize="none" {...register("instagram")} /><small className="muted">Pode informar apenas o @.</small></div></div>
-    <div className="grid cards"><div className="field"><label htmlFor="city">Cidade</label><input id="city" autoComplete="address-level2" aria-invalid={!!errors.city} {...register("city")} />{errors.city && <p className="error">{errors.city.message}</p>}</div><div className="field"><label htmlFor="category">Categoria</label><select id="category" aria-invalid={!!errors.category} {...register("category")}><option value="">Selecione</option>{categories.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select>{errors.category && <p className="error">{errors.category.message}</p>}</div></div>
+    <div className={styles.row}><div className="field"><label htmlFor="phone">WhatsApp</label><input id="phone" inputMode="tel" autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : "phone-help"} {...register("phone")} /><small id="phone-help" className="muted">Inclua DDD. Ex.: (71) 99999-9999.</small>{errors.phone && <p className="error" id="phone-error">{errors.phone.message}</p>}</div><div className="field"><label htmlFor="instagram">Instagram</label><input id="instagram" autoCapitalize="none" {...register("instagram")} /><small className="muted">Pode informar apenas o @.</small></div></div>
+    <div className={styles.row}><div className="field"><label htmlFor="city">Cidade</label><input id="city" autoComplete="address-level2" aria-invalid={!!errors.city} {...register("city")} />{errors.city && <p className="error">{errors.city.message}</p>}</div><div className="field"><label htmlFor="category">Categoria</label><select id="category" aria-invalid={!!errors.category} {...register("category")}><option value="">Selecione</option>{categories.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select>{errors.category && <p className="error">{errors.category.message}</p>}</div></div>
     <div className="field"><label htmlFor="presentation">Breve apresentação</label><textarea id="presentation" aria-invalid={!!errors.presentation} {...register("presentation")} />{errors.presentation && <p className="error">{errors.presentation.message}</p>}</div>
     <div className="field"><label htmlFor="portfolio_url">Link de portfólio</label><input id="portfolio_url" type="url" inputMode="url" {...register("portfolio_url")} />{errors.portfolio_url && <p className="error">{errors.portfolio_url.message}</p>}</div>
     <div className="field"><label htmlFor="portfolio_file">Foto ou portfólio (JPG, PNG ou WebP, até 10 MB)</label><input id="portfolio_file" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => setFile(event.target.files?.[0] ?? null)} />{file && <small className="muted">Selecionado: {file.name} ({Math.ceil(file.size / 1024)} KB)</small>}{progress > 0 && <progress value={progress} max="100" aria-label={`Upload ${progress}%`}>{progress}%</progress>}</div>
-    <label><input type="checkbox" {...register("save_draft")} /> Guardar neste aparelho apenas nome profissional, cidade e categoria enquanto preencho.</label>
-    <label><input type="checkbox" aria-invalid={!!errors.privacy_accepted} {...register("privacy_accepted")} /> Li a <a href="/privacidade" target="_blank">política de privacidade</a> e autorizo o uso dos dados para inscrição e seleção.</label>{errors.privacy_accepted && <p className="error">{errors.privacy_accepted.message}</p>}
-    <div className="visually-hidden" aria-hidden="true"><label htmlFor="website">Não preencha</label><input id="website" tabIndex={-1} autoComplete="off" {...register("website")} /></div>
-    <button className="button" type="submit" disabled={isSubmitting}>{isSubmitting ? "ENVIANDO…" : "ENVIAR INSCRIÇÃO"}</button>
+    <label className={styles.checkbox}><input type="checkbox" {...register("save_draft")} /><span>Guardar neste aparelho apenas nome profissional, cidade e categoria enquanto preencho.</span></label>
+    <label className={styles.checkbox}><input id="privacy_accepted" type="checkbox" aria-invalid={!!errors.privacy_accepted} aria-describedby={errors.privacy_accepted ? "privacy-error" : undefined} {...register("privacy_accepted")} /><span>Li a <a href="/privacidade" target="_blank" rel="noopener noreferrer">política de privacidade</a> e autorizo o uso dos dados para inscrição e seleção.</span></label>{errors.privacy_accepted && <p className="error" id="privacy-error">{errors.privacy_accepted.message}</p>}
+    <div className={styles.honeypot} aria-hidden="true"><label htmlFor="website">Não preencha</label><input id="website" tabIndex={-1} autoComplete="off" {...register("website")} /></div>
+    <button className={`button ${styles.submit}`} type="submit" disabled={isSubmitting}>{isSubmitting ? "ENVIANDO…" : "ENVIAR INSCRIÇÃO"}</button>
   </form>;
 }

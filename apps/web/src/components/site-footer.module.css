@@ -11,8 +11,9 @@
 }
 
 .about img {
-  width: 7rem;
-  height: 7rem;
+  width: min(100%, 11rem);
+  height: auto;
+  max-height: 5.2rem;
   object-fit: contain;
 }
 

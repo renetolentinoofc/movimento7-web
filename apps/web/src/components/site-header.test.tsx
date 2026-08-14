@@ -26,7 +26,9 @@ describe("SiteHeader",()=>{
     render(<SiteHeader/>);
     const button=screen.getByRole("button",{name:"Abrir menu"});
     await user.click(button);
-    await user.click(screen.getByRole("link",{name:"LOJA"}));
+    const storeLink = screen.getByRole("link", { name: "LOJA" });
+    storeLink.addEventListener("click", event => event.preventDefault(), { once: true });
+    await user.click(storeLink);
     expect(button).toHaveAttribute("aria-expanded","false");
   });
 });
