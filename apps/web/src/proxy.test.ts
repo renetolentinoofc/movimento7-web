@@ -31,4 +31,15 @@ describe("proteção das rotas administrativas", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("location")).toBeNull();
   });
+
+  it("protege também a página de troca de senha quando não existe sessão", () => {
+    const response = proxy(
+      new NextRequest("https://movimento7.com.br/admin/trocar-senha"),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://movimento7.com.br/admin/login",
+    );
+  });
 });

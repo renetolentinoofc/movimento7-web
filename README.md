@@ -23,6 +23,16 @@ Acesse `http://localhost:3000`.
 
 Nunca configure credenciais de banco, OAuth, senha administrativa ou `SECRET_KEY` neste serviço.
 
+## Painel administrativo
+
+As rotas sob `/admin` exigem o cookie de sessão `HttpOnly`. Uma visita sem sessão é redirecionada
+para `/admin/login`. No primeiro acesso, contas com troca obrigatória seguem para
+`/admin/trocar-senha`; a alteração usa o token CSRF da sessão e termina todas as sessões anteriores.
+
+O usuário inicial padrão é `admin@movimento7.com`; sua senha não existe no frontend e deve ser
+definida com segurança no serviço da API. A configuração do primeiro usuário, o diagnóstico do
+proxy e o exemplo de requisição manual estão em [docs/ACESSO_ADMIN.md](docs/ACESSO_ADMIN.md).
+
 ## Landing page
 
 A página inicial é montada em `apps/web/src/components/home`. Cada bloco possui uma responsabilidade própria (apresentação, programação, Rima Viva, produtos, leilão e parceiros), com estilos compartilhados em `home.module.css`. Os tokens específicos da identidade Movimento 7 ficam em `packages/ui/src/tokens.css`.
