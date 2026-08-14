@@ -35,7 +35,7 @@ export default async function Home() {
     "@type": "Organization",
     name: "Movimento 7",
     url: siteUrl,
-    logo: `${siteUrl}/brand/logo-movimento7.webp`,
+    logo: `${siteUrl}/brand/logo-movimento7-edicao-01.webp`,
     address: { "@type": "PostalAddress", addressLocality: "Belo Horizonte", addressRegion: "MG", addressCountry: "BR" }
   };
 

@@ -11,9 +11,9 @@ describe("MediaImage", () => {
   });
 
   it("mantém dimensões explícitas para reservar o espaço da imagem", () => {
-    render(<MediaImage src="/brand/logo-movimento7.webp" alt="Movimento 7" width={640} height={640} />);
+    render(<MediaImage src="/brand/logo-movimento7-edicao-01.webp" alt="Movimento 7" width={1024} height={1024} />);
     const image = screen.getByRole("img", { name: "Movimento 7" });
-    expect(image).toHaveAttribute("width", "640");
-    expect(image).toHaveAttribute("height", "640");
+    expect(image).toHaveAttribute("width", "1024");
+    expect(image).toHaveAttribute("height", "1024");
   });
 });

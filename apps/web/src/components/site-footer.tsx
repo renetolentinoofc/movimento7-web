@@ -16,7 +16,7 @@ export function SiteFooter() {
     <div className={`container ${styles.grid}`}>
       <div className={styles.about}>
         <div className={styles.brandMark}>
-          <Image src="/brand/logo-movimento7.webp" alt="Movimento 7" width={640} height={640} sizes="188px" />
+          <Image src="/brand/logo-movimento7-edicao-01.webp" alt="Movimento 7 — Festival Cultural, Edição 01" width={1024} height={1024} sizes="188px" />
         </div>
         <p>Uma plataforma de desenvolvimento cultural que conecta pessoas, revela talentos e cria oportunidades.</p>
       </div>
