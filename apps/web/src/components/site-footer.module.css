@@ -10,11 +10,24 @@
   gap: clamp(2rem, 4vw, 5rem);
 }
 
-.about img {
+.brandMark {
+  position: relative;
   width: min(100%, 11rem);
-  height: auto;
-  max-height: 5.2rem;
+  height: 5.2rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.brandMark img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11.7rem;
+  height: 11.7rem;
+  max-width: none;
   object-fit: contain;
+  transform: translate(-50%, -50%);
 }
 
 .about p { max-width: 25rem; color: #b9c8c5; }

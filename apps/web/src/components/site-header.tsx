@@ -60,7 +60,7 @@ export function SiteHeader() {
   return <header className={styles.header}>
     <div className={`container ${styles.bar}`}>
       <Link className={styles.brand} href="/" aria-label="Movimento 7 — início">
-        <Image src="/brand/logo-movimento7-horizontal.webp" alt="" width={900} height={422} priority sizes="(max-width: 1100px) 116px, 160px" />
+        <Image src="/brand/logo-movimento7.webp" alt="" width={640} height={640} priority sizes="(max-width: 1100px) 124px, 170px" />
       </Link>
       <button ref={toggle} className={styles.toggle} type="button" aria-expanded={open} aria-controls="main-nav" aria-label={open ? "Fechar menu" : "Abrir menu"} onClick={() => setOpen(!open)}>
         {open ? <X aria-hidden /> : <Menu aria-hidden />}

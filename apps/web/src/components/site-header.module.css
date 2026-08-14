@@ -16,17 +16,27 @@
 }
 
 .brand {
-  display: inline-flex;
+  position: relative;
+  width: clamp(8.5rem, 11vw, 10rem);
+  height: 4.5rem;
+  display: inline-grid;
   align-items: center;
+  justify-items: center;
   flex: 0 0 auto;
+  overflow: hidden;
   text-decoration: none;
 }
 
 .brand img {
-  width: clamp(8.5rem, 11vw, 10rem);
-  height: auto;
-  max-height: 4.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(9.05rem, 11.7vw, 10.65rem);
+  height: clamp(9.05rem, 11.7vw, 10.65rem);
+  max-width: none;
+  flex: 0 0 auto;
   object-fit: contain;
+  transform: translate(-50%, -50%);
 }
 
 .nav {
@@ -98,7 +108,8 @@
 
 @media (max-width: 1100px) {
   .bar { min-height: 5.2rem; }
-  .brand img { width: 7.25rem; height: auto; max-height: 3.6rem; }
+  .brand { width: 7.25rem; height: 3.6rem; }
+  .brand img { width: 7.75rem; height: 7.75rem; }
   .toggle { display: inline-flex; position: relative; z-index: 2; }
   .scrim {
     position: fixed;
