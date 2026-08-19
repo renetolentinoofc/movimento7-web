@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 
 import { AdminCommunications } from "@/components/admin-communications";
+import { AdminContacts } from "@/components/admin-contacts";
 import { AdminEditions } from "@/components/admin-editions";
 import { AdminProfiles } from "@/components/admin-profiles";
 import { AdminRegistrations } from "@/components/admin-registrations";
+import { AdminSystem } from "@/components/admin-system";
 import { PANEL_MODULE_DETAILS } from "@/lib/panel-modules";
 
 export default async function PanelModulePage({
@@ -16,9 +18,11 @@ export default async function PanelModulePage({
   if (!item) notFound();
 
   if (moduleSlug === "inscricoes") return <AdminRegistrations />;
+  if (moduleSlug === "contatos") return <AdminContacts />;
   if (moduleSlug === "perfis") return <AdminProfiles />;
   if (moduleSlug === "edicoes") return <AdminEditions />;
   if (moduleSlug === "comunicacao") return <AdminCommunications />;
+  if (moduleSlug === "sistema") return <AdminSystem />;
 
   return (
     <>

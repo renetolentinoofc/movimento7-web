@@ -486,6 +486,87 @@ export interface paths {
         patch: operations["updateAdminEditionStatus"];
         trace?: never;
     };
+    "/admin/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lista a caixa de entrada de contatos com filtros operacionais */
+        get: operations["listAdminContacts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/contacts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getAdminContact"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/contacts/{id}/triage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["updateAdminContactTriage"];
+        trace?: never;
+    };
+    "/admin/contacts/{id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["createAdminContactNote"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/contacts/{id}/reply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["replyAdminContact"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/registrations": {
         parameters: {
             query?: never;
@@ -834,6 +915,21 @@ export interface components {
         AdminEmailTestInput: {
             /** Format: email */
             recipient?: string;
+            idempotency_key: string;
+        };
+        AdminContactTriageInput: {
+            /** @enum {string} */
+            status?: "received" | "in_progress" | "resolved" | "archived";
+            /** Format: uuid */
+            assigned_to_id?: string | null;
+            reason?: string;
+        };
+        AdminContactNoteInput: {
+            body: string;
+        };
+        AdminContactReplyInput: {
+            subject: string;
+            message: string;
             idempotency_key: string;
         };
         AdminEditionInput: {
@@ -1394,6 +1490,112 @@ export interface operations {
         };
         responses: {
             200: components["responses"]["Success"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            422: components["responses"]["Error"];
+        };
+    };
+    listAdminContacts: {
+        parameters: {
+            query?: {
+                q?: string;
+                status?: "received" | "in_progress" | "resolved" | "archived";
+                assigned_to_id?: string;
+                page?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["Success"];
+            403: components["responses"]["Error"];
+        };
+    };
+    getAdminContact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: components["responses"]["Success"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+        };
+    };
+    updateAdminContactTriage: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-CSRF-Token": components["parameters"]["CsrfToken"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminContactTriageInput"];
+            };
+        };
+        responses: {
+            200: components["responses"]["Success"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            422: components["responses"]["Error"];
+        };
+    };
+    createAdminContactNote: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-CSRF-Token": components["parameters"]["CsrfToken"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminContactNoteInput"];
+            };
+        };
+        responses: {
+            201: components["responses"]["Success"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            422: components["responses"]["Error"];
+        };
+    };
+    replyAdminContact: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-CSRF-Token": components["parameters"]["CsrfToken"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminContactReplyInput"];
+            };
+        };
+        responses: {
+            200: components["responses"]["Success"];
+            201: components["responses"]["Success"];
             403: components["responses"]["Error"];
             404: components["responses"]["Error"];
             409: components["responses"]["Error"];

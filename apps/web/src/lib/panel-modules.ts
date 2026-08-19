@@ -2,6 +2,7 @@ export const PANEL_MODULES = [
   { slug: "", label: "Visão geral" },
   { slug: "trocar-senha", label: "Trocar senha" },
   { slug: "inscricoes", label: "Inscrições" },
+  { slug: "contatos", label: "Contatos" },
   { slug: "perfis", label: "Perfis" },
   { slug: "edicoes", label: "Edições" },
   { slug: "loja", label: "Loja" },
@@ -20,6 +21,10 @@ export const PANEL_MODULE_DETAILS: Record<string, { title: string; description: 
   inscricoes: {
     title: "Inscrições",
     description: "Busca, filtros, prioridade, responsável, notas, histórico e status.",
+  },
+  contatos: {
+    title: "Contatos",
+    description: "Caixa de entrada, responsáveis, notas e respostas por e-mail.",
   },
   perfis: {
     title: "Perfis e artistas",
