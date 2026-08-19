@@ -70,7 +70,7 @@ export function AdminGallery() {
     if (target < 0 || target >= media.length) return;
     const reordered = [...media];
     [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
-    const response = await fetch("/api/v1/admin/gallery/order", { method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: JSON.stringify({ ids: reordered.map((item) => item.id) }) });
+    const response = await fetch("/api/v1/admin/gallery/order", { method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrf }, body: JSON.stringify({ album_id: albumId, ids: reordered.map((item) => item.id) }) });
     const payload = await readApiEnvelope<{ saved: boolean }>(response);
     if (!response.ok || !payload?.data) return setError(apiErrorMessage(payload, "Não foi possível salvar a ordem."));
     setMedia(reordered); setMessage("Ordem das mídias atualizada.");
