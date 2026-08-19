@@ -13,6 +13,7 @@
   "scripts": {
     "dev:web": "npm run dev --workspace @movimento7/web",
     "build": "npm run build --workspace @movimento7/web",
+    "e2e": "playwright test",
     "lint": "npm run lint --workspace @movimento7/web",
     "typecheck": "npm run typecheck --workspace @movimento7/web",
     "test:web": "npm run test --workspace @movimento7/web"
