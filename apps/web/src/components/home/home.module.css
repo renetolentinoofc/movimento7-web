@@ -146,14 +146,18 @@
   .partnerGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
   .heroCopy { padding: 4.5rem 1rem; }
   .heroCopyInner { width: min(100%, var(--content-max)); justify-self: center; }
   .hero h1 { max-width: 12ch; font-size: clamp(3.5rem, 10.5vw, 5rem); }
+  .hero h1 span { white-space: normal; }
   .heroVisual { min-height: 39rem; }
   .heroCircle { width: 70vw; }
   .heroPerson { width: min(86%, 35rem); right: 5%; }
+}
+
+@media (max-width: 800px) {
   .split, .rimaGrid, .auctionGrid { grid-template-columns: 1fr; }
   .barberCopy, .rimaCopy, .auctionCopy { max-width: 42rem; }
   .barberArt { margin-top: 1rem; }
