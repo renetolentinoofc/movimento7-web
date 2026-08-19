@@ -15,7 +15,11 @@ export default async function PanelLoginPage({ searchParams }: LoginPageProps) {
         Use sua conta individual. Cinco tentativas inválidas em quinze minutos acionam
         limitação progressiva.
       </p>
-      <AdminLogin passwordChanged={status === "password-changed"} />
+      <AdminLogin
+        loggedOut={status === "logged-out"}
+        passwordChanged={status === "password-changed"}
+        passwordReset={status === "password-reset"}
+      />
     </section>
   );
 }

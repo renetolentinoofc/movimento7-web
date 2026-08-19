@@ -13,17 +13,23 @@ export function ContactForm() {
     setStatus("submitting");
     const form = new FormData(event.currentTarget);
     const payload = Object.fromEntries(form);
-    const response = await apiRequest<{ protocol: string }>("/api/v1/contact", {
-      method: "POST",
-      body: JSON.stringify({ ...payload, privacy_accepted: form.get("privacy_accepted") === "on", privacy_version: "2026-08-draft" })
-    });
-    if (response.error) {
-      setMessage(response.error.message);
+    try {
+      const response = await apiRequest<{ protocol: string; notification_status: string }>("/api/v1/contact", {
+        method: "POST",
+        body: JSON.stringify({ ...payload, privacy_accepted: form.get("privacy_accepted") === "on", privacy_version: "2026-08-draft" })
+      });
+      if (response.error) {
+        setMessage(response.error.message);
+        setStatus("error");
+      } else {
+        const forwarded = response.data?.notification_status === "sent";
+        setMessage(`${forwarded ? "Mensagem encaminhada" : "Mensagem recebida, mas o encaminhamento por e-mail ficou pendente"}. Protocolo: ${response.data?.protocol}`);
+        setStatus("success");
+        event.currentTarget.reset();
+      }
+    } catch {
+      setMessage("Não foi possível conectar ao serviço de contato.");
       setStatus("error");
-    } else {
-      setMessage(`Mensagem recebida. Protocolo: ${response.data?.protocol}`);
-      setStatus("success");
-      event.currentTarget.reset();
     }
   }
 
@@ -57,8 +63,8 @@ export function ContactForm() {
       <span>Autorizo o tratamento dos dados para responder este contato.</span>
     </label>
     <div className={styles.honeypot} aria-hidden="true">
-      <label htmlFor="contact-website">Não preencha</label>
-      <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" />
+      <label htmlFor="contact-fax">Não preencha</label>
+      <input id="contact-fax" name="fax_number_for_bots" tabIndex={-1} autoComplete="off" />
     </div>
     <button className={`button ${styles.submit}`} disabled={status === "submitting"}>
       {status === "submitting" ? "ENVIANDO…" : "ENVIAR MENSAGEM"}

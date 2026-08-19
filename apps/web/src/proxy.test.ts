@@ -22,6 +22,14 @@ describe("proteção das rotas do painel", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
+  it("permite solicitar e concluir recuperação sem sessão", () => {
+    for (const path of ["/painel/esqueci-senha", "/painel/redefinir-senha?token=teste"]) {
+      const response = proxy(new NextRequest(`https://movimento7.com.br${path}`));
+      expect(response.status).toBe(200);
+      expect(response.headers.get("location")).toBeNull();
+    }
+  });
+
   it("permite continuar quando existe cookie de sessão", () => {
     const request = new NextRequest("https://movimento7.com.br/painel", {
       headers: { cookie: "m7_session=opaque-session-token" },

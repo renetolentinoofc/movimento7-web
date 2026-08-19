@@ -1,0 +1,66 @@
+.panel { display: grid; gap: var(--space-5); padding: clamp(var(--space-4), 4vw, var(--space-6)); border: 2px solid var(--color-yellow); border-radius: var(--radius-md); background: var(--color-bg-deep); box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 35%); }
+.topbar, .statusBar, .publishBar { display: flex; align-items: start; justify-content: space-between; gap: var(--space-4); }
+.topbar h2 { margin: 0; font-size: clamp(2.3rem, 6vw, 4.5rem); text-transform: none; }
+.content { display: grid; gap: var(--space-5); }
+.statusBar { align-items: center; padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); }
+.statusBar span { padding: .35rem .65rem; border: 1px solid currentColor; border-radius: 99px; color: var(--color-info); font: 700 .75rem/1 var(--font-data); text-transform: uppercase; }
+.statusBar span[data-status="published"] { color: var(--color-success); }
+.statusBar span[data-status="archived"] { color: var(--color-text-muted); }
+.editorGrid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr); gap: var(--space-5); }
+.form, .preview, .mediaSection, .publishBar { padding: var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+.form { display: grid; align-content: start; gap: var(--space-4); }
+.form h3, .preview h3, .mediaSection h3, .publishBar h3 { margin: 0; font-size: 1.6rem; }
+.twoColumns { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.categories { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+.categories legend { padding-inline: var(--space-2); font-weight: 800; }
+.categories label, .featured { display: flex; align-items: center; gap: var(--space-2); font-weight: 700; }
+.categories label { padding: .35rem .6rem; border-radius: 99px; background: var(--color-surface-raised); }
+.preview { align-self: start; position: sticky; top: var(--space-4); overflow: hidden; }
+.preview img, .imagePlaceholder { width: 100%; aspect-ratio: 4 / 3; border-radius: var(--radius-sm); object-fit: cover; background: var(--color-bg-deep); }
+.imagePlaceholder { display: grid; place-items: center; color: var(--color-text-muted); font: 700 .8rem/1 var(--font-data); }
+.previewCategories { margin: var(--space-4) 0 var(--space-2); color: var(--color-yellow); font: 700 .75rem/1 var(--font-data); text-transform: uppercase; }
+.preview h3 { font-size: clamp(2rem, 4vw, 3.5rem); }
+.previewBio { white-space: pre-wrap; }
+.featuredBadge { display: inline-flex; padding: .3rem .6rem; border-radius: 99px; background: var(--color-yellow); color: var(--color-bg-deep); font-size: .75rem; }
+.mediaSection { display: grid; gap: var(--space-4); }
+.mediaHeading { display: flex; align-items: start; justify-content: space-between; gap: var(--space-4); }
+.mediaHeading > span { flex: 0 0 auto; padding: .35rem .65rem; border: 1px solid var(--color-border); border-radius: 99px; color: var(--color-text-muted); font: 700 .75rem/1 var(--font-data); }
+.uploadForm { display: grid; grid-template-columns: minmax(12rem, 1.15fr) repeat(2, minmax(10rem, 1fr)) auto; align-items: end; gap: var(--space-3); padding: var(--space-4); border: 1px dashed var(--color-info); border-radius: var(--radius-sm); background: var(--color-bg-deep); }
+.uploadIntro { grid-column: 1 / -1; display: grid; gap: var(--space-1); }
+.uploadForm input[type="file"] { padding: .55rem; }
+.orderHelp { margin: 0; color: var(--color-text-muted); font-size: .9rem; }
+.mediaGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--space-4); }
+.mediaCard { display: grid; align-content: start; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-deep); transition: opacity var(--motion-fast), border-color var(--motion-fast); }
+.mediaCard[draggable="true"] { cursor: grab; }
+.mediaCard[draggable="true"]:active { cursor: grabbing; }
+.mediaCard.dragging { opacity: .45; border-color: var(--color-info); }
+.mediaImage { position: relative; }
+.mediaImage img { width: 100%; aspect-ratio: 4 / 3; display: block; border-radius: var(--radius-sm); object-fit: cover; }
+.orderBadge, .coverBadge { position: absolute; top: var(--space-2); padding: .3rem .5rem; border-radius: 99px; font: 900 .7rem/1 var(--font-data); }
+.orderBadge { left: var(--space-2); background: rgb(3 4 10 / 82%); color: var(--color-text); }
+.coverBadge { right: var(--space-2); background: var(--color-yellow); color: var(--color-bg-deep); }
+.orderActions, .mediaActions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.orderActions button { min-height: 2.5rem; padding: .45rem .7rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface-raised); color: var(--color-text); font-weight: 800; }
+.orderActions button:disabled { opacity: .45; cursor: not-allowed; }
+.mediaActions > * { flex: 1; }
+.deleteButton { min-height: 3rem; padding: .7rem 1rem; border: 1px solid var(--color-error); border-radius: var(--radius-sm); background: transparent; color: var(--color-error); font-weight: 900; }
+.deleteButton:hover:not(:disabled) { background: #35141b; }
+.deleteButton:disabled { opacity: .5; cursor: not-allowed; }
+.publishBar { align-items: center; }
+.publishActions { display: flex; flex-wrap: wrap; justify-content: end; gap: var(--space-2); }
+@media (max-width: 900px) {
+  .topbar, .statusBar, .publishBar { align-items: stretch; flex-direction: column; }
+  .editorGrid, .twoColumns { grid-template-columns: 1fr; }
+  .preview { position: static; }
+  .publishActions { justify-content: start; }
+  .uploadForm { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .mediaHeading { align-items: stretch; flex-direction: column; }
+  .mediaHeading > span { align-self: start; }
+  .uploadForm { grid-template-columns: 1fr; }
+  .uploadIntro { grid-column: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mediaCard { transition: none; }
+}

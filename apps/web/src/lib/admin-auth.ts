@@ -6,6 +6,25 @@ export const adminLoginSchema = z.object({
   password: z.string().min(1, "Informe sua senha."),
 });
 
+export const adminPasswordResetRequestSchema = z.object({
+  email: z.email("Informe um e-mail válido."),
+});
+
+export const adminPasswordResetConfirmSchema = z
+  .object({
+    new_password: z.string().min(12, "A nova senha precisa ter 12 ou mais caracteres."),
+    password_confirmation: z.string().min(1, "Confirme a nova senha."),
+  })
+  .superRefine((values, context) => {
+    if (values.new_password !== values.password_confirmation) {
+      context.addIssue({
+        code: "custom",
+        message: "As novas senhas não conferem.",
+        path: ["password_confirmation"],
+      });
+    }
+  });
+
 export const adminChangePasswordSchema = z
   .object({
     current_password: z.string().min(1, "Informe a senha atual."),

@@ -1,0 +1,171 @@
+.panel {
+  position: relative;
+  display: grid;
+  gap: var(--space-5);
+  padding: clamp(var(--space-4), 4vw, var(--space-6));
+  border: 2px solid var(--color-yellow);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-deep);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 35%);
+}
+
+.topbar,
+.profileBlock {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: clamp(2.3rem, 6vw, 4.5rem);
+  text-transform: none;
+}
+
+.content {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.summary div,
+.block,
+.profileBlock {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.summary span,
+.definitionList dt {
+  display: block;
+  color: var(--color-text-muted);
+  font: 700 0.72rem/1.4 var(--font-data);
+  text-transform: uppercase;
+}
+
+.summary strong {
+  display: block;
+  margin-top: var(--space-1);
+}
+
+.block {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.block h3,
+.profileBlock h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.definitionList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.definitionList dd {
+  margin: var(--space-1) 0 0;
+}
+
+.presentation {
+  max-width: 75ch;
+  white-space: pre-wrap;
+}
+
+.files {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--space-3);
+}
+
+.files a {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.files a:hover {
+  border-color: var(--color-yellow);
+}
+
+.files span {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.formsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.noteForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.noteForm > :first-child {
+  grid-column: 1 / -1;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.timeline {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.timeline article {
+  padding: var(--space-3);
+  border-left: 3px solid var(--color-info);
+  background: var(--color-bg-deep);
+}
+
+.timeline p {
+  margin: var(--space-1) 0;
+}
+
+.timeline small {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 800px) {
+  .topbar,
+  .profileBlock {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .summary,
+  .formsGrid,
+  .definitionList,
+  .noteForm {
+    grid-template-columns: 1fr;
+  }
+
+  .noteForm > :first-child {
+    grid-column: auto;
+  }
+}

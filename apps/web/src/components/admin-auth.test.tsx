@@ -5,6 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AdminChangePassword } from "./admin-change-password";
 import { AdminDashboard } from "./admin-dashboard";
 import { AdminLogin } from "./admin-login";
+import {
+  AdminPasswordResetConfirm,
+  AdminPasswordResetRequest,
+} from "./admin-password-reset";
 
 const router = vi.hoisted(() => ({
   refresh: vi.fn(),
@@ -186,5 +190,54 @@ describe("autenticação administrativa", () => {
 
     await user.click(screen.getByRole("button", { name: "Ocultar senha" }));
     expect(password).toHaveAttribute("type", "password");
+  });
+
+  it("solicita recuperação sem revelar se a conta existe", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      apiResponse(202, {
+        accepted: true,
+        message: "Se a conta existir, enviaremos as instruções de recuperação.",
+      }),
+    );
+    const user = userEvent.setup();
+
+    render(<AdminPasswordResetRequest />);
+    await user.type(screen.getByLabelText("E-mail da conta"), "admin@movimento7.com");
+    await user.click(screen.getByRole("button", { name: "ENVIAR LINK SEGURO" }));
+
+    expect(await screen.findByText(/Se a conta existir/)).toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/v1/admin/auth/password-reset/request",
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify({ email: "admin@movimento7.com" }),
+      }),
+    );
+  });
+
+  it("redefine a senha usando o token recebido no link", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      apiResponse(200, { changed: true, reauthentication_required: true }),
+    );
+    const user = userEvent.setup();
+
+    render(<AdminPasswordResetConfirm token="token-seguro-teste" />);
+    await user.type(screen.getByLabelText("Nova senha"), "nova-senha-bem-segura");
+    await user.type(
+      screen.getByLabelText("Confirme a nova senha"),
+      "nova-senha-bem-segura",
+    );
+    await user.click(screen.getByRole("button", { name: "REDEFINIR SENHA" }));
+
+    await waitFor(() =>
+      expect(router.replace).toHaveBeenCalledWith("/painel/login?status=password-reset"),
+    );
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/v1/admin/auth/password-reset/confirm",
+      expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining('"token":"token-seguro-teste"'),
+      }),
+    );
   });
 });

@@ -26,6 +26,16 @@
   background: var(--color-surface);
 }
 
+.sidebarFooter {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.sidebarFooter button {
+  width: 100%;
+}
+
 .content {
   min-width: 0;
   padding: clamp(1.5rem, 4vw, 4rem);

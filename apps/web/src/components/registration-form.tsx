@@ -17,6 +17,7 @@ const categories = [
 const schema = z.object({
   full_name: z.string().trim().min(2, "Informe seu nome.").max(140),
   professional_name: z.string().trim().max(140),
+  email: z.email("Informe um e-mail válido.").max(180),
   phone: z.string().min(10, "Informe um WhatsApp com DDD."),
   instagram: z.string().max(100),
   city: z.string().trim().min(2, "Informe sua cidade.").max(120),
@@ -24,11 +25,11 @@ const schema = z.object({
   presentation: z.string().trim().min(20, "Conte um pouco mais sobre seu trabalho.").max(3000),
   portfolio_url: z.union([z.literal(""), z.url("Use um link completo iniciado por http:// ou https://.")]),
   privacy_accepted: z.literal(true, { error: "Você precisa aceitar a política de privacidade." }),
-  website: z.string().max(0),
+  fax_number_for_bots: z.string().max(0),
   save_draft: z.boolean()
 });
 type Values = z.infer<typeof schema>;
-type Created = { protocol: string; category: string; professional_name?: string; upload_token: string };
+type Created = { protocol: string; category: string; professional_name?: string; upload_token: string; notification_status: string };
 
 export function RegistrationForm() {
   const [file, setFile] = useState<File | null>(null);
@@ -38,7 +39,7 @@ export function RegistrationForm() {
   const summary = useRef<HTMLDivElement>(null);
   const { register, handleSubmit, setError, control, formState: { errors, isDirty, isSubmitting } } = useForm<Values>({
     resolver: zodResolver(schema),
-    defaultValues: { full_name: "", professional_name: "", phone: "", instagram: "", city: "", category: "", presentation: "", portfolio_url: "", privacy_accepted: false as true, website: "", save_draft: false }
+    defaultValues: { full_name: "", professional_name: "", email: "", phone: "", instagram: "", city: "", category: "", presentation: "", portfolio_url: "", privacy_accepted: false as true, fax_number_for_bots: "", save_draft: false }
   });
   const saveDraft = useWatch({ control, name: "save_draft", defaultValue: false });
   useEffect(() => {
@@ -87,6 +88,7 @@ export function RegistrationForm() {
     {(serverError || Object.keys(errors).length > 0) && <div className="error-summary" role="alert" tabIndex={-1} ref={summary}><strong>Não foi possível enviar ainda.</strong><p>{serverError ?? "Revise os campos destacados."}</p></div>}
     <div className="field"><label htmlFor="full_name">Nome completo</label><input id="full_name" autoComplete="name" aria-invalid={!!errors.full_name} aria-describedby={errors.full_name ? "full_name-error" : undefined} {...register("full_name")} />{errors.full_name && <p className="error" id="full_name-error">{errors.full_name.message}</p>}</div>
     <div className="field"><label htmlFor="professional_name">Nome artístico ou profissional</label><input id="professional_name" {...register("professional_name")} /></div>
+    <div className="field"><label htmlFor="registration_email">E-mail</label><input id="registration_email" type="email" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "registration-email-error" : "registration-email-help"} {...register("email")} /><small id="registration-email-help" className="muted">Enviaremos o protocolo e as atualizações da seleção para este endereço.</small>{errors.email && <p className="error" id="registration-email-error">{errors.email.message}</p>}</div>
     <div className={styles.row}><div className="field"><label htmlFor="phone">WhatsApp</label><input id="phone" inputMode="tel" autoComplete="tel" aria-invalid={!!errors.phone} aria-describedby={errors.phone ? "phone-error" : "phone-help"} {...register("phone")} /><small id="phone-help" className="muted">Inclua DDD. Ex.: (71) 99999-9999.</small>{errors.phone && <p className="error" id="phone-error">{errors.phone.message}</p>}</div><div className="field"><label htmlFor="instagram">Instagram</label><input id="instagram" autoCapitalize="none" {...register("instagram")} /><small className="muted">Pode informar apenas o @.</small></div></div>
     <div className={styles.row}><div className="field"><label htmlFor="city">Cidade</label><input id="city" autoComplete="address-level2" aria-invalid={!!errors.city} {...register("city")} />{errors.city && <p className="error">{errors.city.message}</p>}</div><div className="field"><label htmlFor="category">Categoria</label><select id="category" aria-invalid={!!errors.category} {...register("category")}><option value="">Selecione</option>{categories.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select>{errors.category && <p className="error">{errors.category.message}</p>}</div></div>
     <div className="field"><label htmlFor="presentation">Breve apresentação</label><textarea id="presentation" aria-invalid={!!errors.presentation} {...register("presentation")} />{errors.presentation && <p className="error">{errors.presentation.message}</p>}</div>
@@ -94,7 +96,7 @@ export function RegistrationForm() {
     <div className="field"><label htmlFor="portfolio_file">Foto ou portfólio (JPG, PNG ou WebP, até 10 MB)</label><input id="portfolio_file" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => setFile(event.target.files?.[0] ?? null)} />{file && <small className="muted">Selecionado: {file.name} ({Math.ceil(file.size / 1024)} KB)</small>}{progress > 0 && <progress value={progress} max="100" aria-label={`Upload ${progress}%`}>{progress}%</progress>}</div>
     <label className={styles.checkbox}><input type="checkbox" {...register("save_draft")} /><span>Guardar neste aparelho apenas nome profissional, cidade e categoria enquanto preencho.</span></label>
     <label className={styles.checkbox}><input id="privacy_accepted" type="checkbox" aria-invalid={!!errors.privacy_accepted} aria-describedby={errors.privacy_accepted ? "privacy-error" : undefined} {...register("privacy_accepted")} /><span>Li a <a href="/privacidade" target="_blank" rel="noopener noreferrer">política de privacidade</a> e autorizo o uso dos dados para inscrição e seleção.</span></label>{errors.privacy_accepted && <p className="error" id="privacy-error">{errors.privacy_accepted.message}</p>}
-    <div className={styles.honeypot} aria-hidden="true"><label htmlFor="website">Não preencha</label><input id="website" tabIndex={-1} autoComplete="off" {...register("website")} /></div>
+    <div className={styles.honeypot} aria-hidden="true"><label htmlFor="registration-fax">Não preencha</label><input id="registration-fax" tabIndex={-1} autoComplete="off" {...register("fax_number_for_bots")} /></div>
     <button className={`button ${styles.submit}`} type="submit" disabled={isSubmitting}>{isSubmitting ? "ENVIANDO…" : "ENVIAR INSCRIÇÃO"}</button>
   </form>;
 }

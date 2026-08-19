@@ -1,0 +1,26 @@
+.section { display: grid; gap: var(--space-6); }
+.heading, .listHeading, .editorHeading, .cardTop, .actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.heading { align-items: end; }
+.heading h1 { font-size: clamp(3rem, 7vw, 6rem); }
+.listHeading h2, .editor h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.5rem); }
+.editor { display: grid; gap: var(--space-5); padding: var(--space-5); border: 1px solid var(--color-yellow); border-radius: var(--radius-md); background: var(--color-surface); }
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr)); gap: var(--space-4); }
+.card { display: grid; align-content: start; gap: var(--space-4); padding: var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: linear-gradient(145deg, var(--color-surface), var(--color-bg-deep)); }
+.card h3 { margin: 0; font-size: 1.8rem; }
+.slug { margin: 0 0 var(--space-1); color: var(--color-yellow); font: 700 .75rem/1 var(--font-data); }
+.status { flex: none; padding: .4rem .7rem; border: 1px solid currentColor; border-radius: 99px; color: var(--color-info); font: 800 .72rem/1 var(--font-data); text-transform: uppercase; }
+.status[data-status="published"] { color: var(--color-success); }
+.status[data-status="closed"] { color: var(--color-yellow); }
+.status[data-status="archived"] { color: var(--color-text-muted); }
+.open { margin: 0; color: var(--color-success); font-weight: 900; }
+.details { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin: 0; }
+.details div { padding: var(--space-3); border-radius: var(--radius-sm); background: var(--color-surface-raised); }
+.details dt { color: var(--color-text-muted); font: 700 .7rem/1.3 var(--font-data); text-transform: uppercase; }
+.details dd { margin: var(--space-1) 0 0; font-weight: 800; }
+.actions { justify-content: flex-start; flex-wrap: wrap; }
+@media (max-width: 800px) {
+  .heading, .listHeading, .editorHeading, .cardTop { align-items: stretch; flex-direction: column; }
+  .formGrid, .details { grid-template-columns: 1fr; }
+  .actions { display: grid; }
+}

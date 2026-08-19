@@ -11,6 +11,7 @@ const links = [
   ["/", "INÍCIO"],
   ["/#sobre", "SOBRE"],
   ["/#programacao", "PROGRAMAÇÃO"],
+  ["/artistas", "ARTISTAS"],
   ["/loja", "LOJA"],
   ["/leilao", "LEILÃO"],
   ["/contato", "CONTATO"]

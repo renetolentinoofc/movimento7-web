@@ -9,6 +9,7 @@ const navigation = [
   ["/", "Início"],
   ["/#sobre", "Sobre"],
   ["/#programacao", "Programação"],
+  ["/artistas", "Artistas"],
   ["/loja", "Loja"],
   ["/leilao", "Leilão"],
   ["/contato", "Contato"]

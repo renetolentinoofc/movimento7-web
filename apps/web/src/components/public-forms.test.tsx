@@ -17,13 +17,14 @@ function expectHiddenHoneypot(container: HTMLElement, fieldName: string) {
 describe("formulários públicos", () => {
   it("mantém o honeypot do contato fora da navegação e da árvore acessível", () => {
     const { container } = render(<ContactForm />);
-    expectHiddenHoneypot(container, "website");
+    expectHiddenHoneypot(container, "fax_number_for_bots");
     expect(screen.queryByRole("textbox", { name: "Não preencha" })).not.toBeInTheDocument();
   });
 
   it("mantém o honeypot da inscrição e oferece áreas de consentimento identificáveis", () => {
     const { container } = render(<RegistrationForm />);
-    expectHiddenHoneypot(container, "website");
+    expectHiddenHoneypot(container, "fax_number_for_bots");
+    expect(screen.getByRole("textbox", { name: "E-mail" })).toHaveAttribute("type", "email");
     expect(screen.getByRole("checkbox", { name: /Guardar neste aparelho/ })).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: /política de privacidade/ })).toBeInTheDocument();
   });

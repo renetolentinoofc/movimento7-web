@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,10 +17,12 @@ import styles from "./admin-auth-form.module.css";
 import { PasswordField } from "./password-field";
 
 type AdminLoginProps = {
+  loggedOut?: boolean;
   passwordChanged?: boolean;
+  passwordReset?: boolean;
 };
 
-export function AdminLogin({ passwordChanged = false }: AdminLoginProps) {
+export function AdminLogin({ loggedOut = false, passwordChanged = false, passwordReset = false }: AdminLoginProps) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<AdminFieldErrors>({});
@@ -88,6 +91,16 @@ export function AdminLogin({ passwordChanged = false }: AdminLoginProps) {
           Senha alterada. Entre novamente com a nova senha.
         </div>
       ) : null}
+      {loggedOut ? (
+        <div className={styles.notice} role="status">
+          Sessão encerrada com segurança.
+        </div>
+      ) : null}
+      {passwordReset ? (
+        <div className={styles.notice} role="status">
+          Senha redefinida. Entre com a nova senha.
+        </div>
+      ) : null}
       <form className={styles.form} onSubmit={submit} noValidate>
         {error ? (
           <div className={styles.error} role="alert">
@@ -124,6 +137,7 @@ export function AdminLogin({ passwordChanged = false }: AdminLoginProps) {
           <button className="button" disabled={loading} type="submit">
             {loading ? "ENTRANDO…" : "ENTRAR"}
           </button>
+          <Link href="/painel/esqueci-senha">Esqueci minha senha</Link>
         </div>
       </form>
     </div>

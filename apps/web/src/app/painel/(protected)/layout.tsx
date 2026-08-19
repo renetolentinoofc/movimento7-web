@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AdminLogout } from "@/components/admin-logout";
 import { PANEL_MODULES } from "@/lib/panel-modules";
 
 import styles from "../painel.module.css";
@@ -20,6 +21,9 @@ export default function ProtectedPanelLayout({ children }: { children: React.Rea
             </Link>
           ))}
         </nav>
+        <div className={styles.sidebarFooter}>
+          <AdminLogout />
+        </div>
       </aside>
       <div className={styles.content}>
         {children}
