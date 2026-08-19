@@ -9,11 +9,14 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Loja", description: "Coleção limitada de streetwear Movimento 7.", alternates: { canonical: "/loja" } };
 
 type Product = { slug: string; name: string; description: string; price_cents: number; available: boolean; media: { url: string; alt: string; width?: number; height?: number }[] };
+const INTERNAL_ONLY_PRODUCT_SLUGS = new Set(["camiseta-movimento7"]);
 
 async function getProducts() {
   try {
     const response = await fetch(`${process.env.INTERNAL_API_URL ?? "http://127.0.0.1:5000"}/api/v1/products`, { next: { revalidate: 60 } });
-    return (await response.json() as Envelope<Product[]>).data ?? [];
+    return ((await response.json() as Envelope<Product[]>).data ?? []).filter(
+      product => !INTERNAL_ONLY_PRODUCT_SLUGS.has(product.slug),
+    );
   } catch { return []; }
 }
 

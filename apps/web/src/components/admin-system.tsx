@@ -26,6 +26,7 @@ export function AdminSystem() {
   const [readiness, setReadiness] = useState<ReadinessData | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [connectingDrive, setConnectingDrive] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -53,6 +54,11 @@ export function AdminSystem() {
 
   useEffect(() => { void load(); }, [load]);
 
+  function connectDrive() {
+    setConnectingDrive(true);
+    window.location.href = "/api/v1/admin/integrations/google-drive/authorize";
+  }
+
   return (
     <section className={styles.section} aria-labelledby="system-title">
       <div className={styles.heading}>
@@ -62,7 +68,7 @@ export function AdminSystem() {
       {error ? <div className="error-summary" role="alert">{error}</div> : null}
       {system ? <div className={styles.grid}>
         <article className={styles.card}><h2>Aplicação</h2><dl className={styles.details}><div><dt>Versão</dt><dd>{system.app_version}</dd></div><div><dt>Commit</dt><dd>{system.git_commit}</dd></div><div><dt>Ambiente</dt><dd>{system.environment}</dd></div><div><dt>Python</dt><dd>{system.python}</dd></div></dl></article>
-        <article className={styles.card}><h2>Dependências</h2><dl className={styles.details}><div><dt>Banco</dt><dd data-good={system.database === "connected"}>{system.database}</dd></div><div><dt>Prontidão</dt><dd data-good={ready?.status === "ready"}>{ready?.status ?? "indisponível"}</dd></div><div><dt>Drive</dt><dd>{system.drive}</dd></div><div><dt>Pagamentos</dt><dd>{system.payment_provider}</dd></div></dl></article>
+        <article className={styles.card}><h2>Dependências</h2><dl className={styles.details}><div><dt>Banco</dt><dd data-good={system.database === "connected"}>{system.database}</dd></div><div><dt>Prontidão</dt><dd data-good={ready?.status === "ready"}>{ready?.status ?? "indisponível"}</dd></div><div><dt>Drive</dt><dd data-good={system.drive === "configured"}>{system.drive}</dd></div><div><dt>Pagamentos</dt><dd>{system.payment_provider}</dd></div></dl><p className="muted">O Drive é usado para armazenar imagens sem guardar os arquivos no servidor.</p><button className="button secondary" type="button" onClick={connectDrive} disabled={connectingDrive}>{connectingDrive ? "ABRINDO GOOGLE…" : system.drive === "configured" ? "REAUTORIZAR GOOGLE DRIVE" : "CONECTAR GOOGLE DRIVE"}</button></article>
         <article className={styles.card}><h2>Recursos controlados</h2><p>{system.auction_bidding_enabled ? "Lances habilitados — somente em ambiente aprovado." : "Lances monetários desativados."}</p><p className="muted">Integrações externas e recursos de risco devem permanecer desligados até validação operacional, jurídica e comercial.</p></article>
         {readiness ? <article className={styles.card}><h2>Checklist de lançamento</h2><ul className={styles.checks}>{readiness.checks.map((check) => <li key={check.key}><span data-status={check.status}>{check.status === "pass" ? "OK" : check.status === "warn" ? "REVISAR" : "BLOQUEADO"}</span>{check.label}</li>)}</ul></article> : null}
       </div> : loading ? <p role="status">Carregando informações…</p> : null}

@@ -30,6 +30,7 @@ export type HomePartner = {
 };
 
 const apiUrl = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:5000";
+const INTERNAL_ONLY_PRODUCT_SLUGS = new Set(["camiseta-movimento7"]);
 
 const defaultPartners: HomePartner[] = [
   { slug: "df-refrigeracao", name: "DF Refrigeração", logo_path: "/brand/partners/df-refrigeracao.webp", logo_alt: "Logo da DF Refrigeração" },
@@ -63,5 +64,9 @@ export async function loadHomeData() {
     load<HomePartner>("partners")
   ]);
 
-  return { products: products.slice(0, 3), auctionLot: auctionLots[0] ?? null, partners: mergePartners(apiPartners) };
+  return {
+    products: products.filter(product => !INTERNAL_ONLY_PRODUCT_SLUGS.has(product.slug)).slice(0, 3),
+    auctionLot: auctionLots[0] ?? null,
+    partners: mergePartners(apiPartners),
+  };
 }
