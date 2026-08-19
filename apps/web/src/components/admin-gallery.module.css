@@ -1,0 +1,13 @@
+.workspace { display: grid; gap: var(--space-6); }
+.topGrid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(18rem, .85fr); gap: var(--space-6); align-items: start; }
+.panel { display: grid; align-content: start; gap: var(--space-4); padding: clamp(var(--space-5), 3vw, var(--space-7)); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+.panel h2 { margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); }
+.panel label { display: grid; gap: var(--space-2); font-weight: 800; }
+.panel input, .panel select, .panel textarea { width: 100%; min-height: 3rem; padding: .75rem .85rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg); color: var(--color-text); }
+.panel textarea { min-height: 7rem; resize: vertical; }
+.uploadGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.wide { grid-column: 1 / -1; }
+.sectionTitle { display: flex; justify-content: space-between; gap: var(--space-4); align-items: end; flex-wrap: wrap; }
+.sectionTitle h2 { margin: 0; }
+.mediaGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: var(--space-5); }
+@media (max-width: 760px) { .topGrid, .uploadGrid { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
