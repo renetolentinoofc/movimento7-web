@@ -8,7 +8,6 @@ import styles from "./home.module.css";
 
 const previews = [
   { name: "Camiseta Dreams", image: "/assets/images/products/camiseta-dreams.webp", width: 967, height: 1400 },
-  { name: "Camiseta Movimento 7", image: "/assets/images/products/camiseta-movimento7.webp", width: 1200, height: 960 },
   { name: "Cropped Movimento 7", image: "/assets/images/products/cropped-movimento7.webp", width: 1000, height: 1232 }
 ];
 

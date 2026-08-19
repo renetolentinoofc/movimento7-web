@@ -7,14 +7,14 @@
   color: var(--mov7-ink);
 }
 
-.heroCopy { display: grid; align-items: center; padding: clamp(3.5rem, 7vw, 8rem) max(1rem, calc((100vw - var(--content-max)) / 2)); padding-right: clamp(2rem, 5vw, 6rem); }
+.heroCopy { container-type: inline-size; display: grid; align-items: center; padding: clamp(3.5rem, 7vw, 8rem) max(1rem, calc((100vw - var(--content-max)) / 2)); padding-right: clamp(2rem, 5vw, 6rem); }
 .heroCopyInner { width: min(100%, 39rem); justify-self: end; }
 .kickerDark, .kickerYellow, .kickerPurple, .kickerTeal { margin: 0 0 1.5rem; font: 900 0.76rem/1.2 var(--font-data); letter-spacing: 0.15em; text-transform: uppercase; }
 .kickerDark { color: var(--mov7-green); }
 .kickerYellow { color: var(--mov7-yellow); }
 .kickerPurple { color: #bc7cff; }
 .kickerTeal { color: var(--mov7-green); }
-.hero h1 { max-width: 12ch; margin: 0; color: var(--mov7-green); font-size: clamp(3.25rem, 5.1vw, 5.6rem); line-height: 0.86; letter-spacing: -0.055em; text-transform: uppercase; }
+.hero h1 { max-width: 12ch; margin: 0; color: var(--mov7-green); font-size: clamp(3.25rem, 11cqw, 5.6rem); line-height: 0.86; letter-spacing: -0.055em; text-transform: uppercase; }
 .hero h1 span { display: block; white-space: nowrap; }
 .heroCopyInner > p:not(.kickerDark) { max-width: 38rem; margin: 2rem 0; color: #2b4541; font-size: clamp(1rem, 1.45vw, 1.18rem); line-height: 1.75; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 0.9rem; }

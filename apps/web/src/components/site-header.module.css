@@ -31,8 +31,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(9.05rem, 11.7vw, 10.65rem);
-  height: clamp(9.05rem, 11.7vw, 10.65rem);
+  width: clamp(7.5rem, 9vw, 8.75rem);
+  height: clamp(7.5rem, 9vw, 8.75rem);
   max-width: none;
   flex: 0 0 auto;
   object-fit: contain;
@@ -109,7 +109,7 @@
 @media (max-width: 1100px) {
   .bar { min-height: 5.2rem; }
   .brand { width: 7.25rem; height: 3.6rem; }
-  .brand img { width: 7.75rem; height: 7.75rem; }
+  .brand img { width: 6.5rem; height: 6.5rem; }
   .toggle { display: inline-flex; position: relative; z-index: 2; }
   .scrim {
     position: fixed;
