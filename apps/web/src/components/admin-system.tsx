@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { apiErrorMessage, readApiEnvelope } from "@/lib/admin-auth";
 
@@ -21,6 +22,7 @@ type ReadyData = { status: string; database: string; media: string; checked_at: 
 type ReadinessData = { status: string; checks: { key: string; status: "pass" | "warn" | "block"; label: string }[] };
 
 export function AdminSystem() {
+  const router = useRouter();
   const [system, setSystem] = useState<SystemData | null>(null);
   const [ready, setReady] = useState<ReadyData | null>(null);
   const [readiness, setReadiness] = useState<ReadinessData | null>(null);
@@ -52,11 +54,14 @@ export function AdminSystem() {
     }
   }, []);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void load(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [load]);
 
   function connectDrive() {
     setConnectingDrive(true);
-    window.location.href = "/api/v1/admin/integrations/google-drive/authorize";
+    router.push("/api/v1/admin/integrations/google-drive/authorize");
   }
 
   return (

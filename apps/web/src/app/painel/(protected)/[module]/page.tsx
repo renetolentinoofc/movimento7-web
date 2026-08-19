@@ -7,6 +7,10 @@ import { AdminProfiles } from "@/components/admin-profiles";
 import { AdminRegistrations } from "@/components/admin-registrations";
 import { AdminStore } from "@/components/admin-store";
 import { AdminGallery } from "@/components/admin-gallery";
+import { AdminPartners } from "@/components/admin-partners";
+import { AdminContent } from "@/components/admin-content";
+import { AdminAudit } from "@/components/admin-audit";
+import { AdminAuction, AdminPrivacy, AdminUsers } from "@/components/admin-step-six";
 import { AdminSystem } from "@/components/admin-system";
 import { PANEL_MODULE_DETAILS } from "@/lib/panel-modules";
 
@@ -27,6 +31,12 @@ export default async function PanelModulePage({
   if (moduleSlug === "sistema") return <AdminSystem />;
   if (moduleSlug === "loja") return <AdminStore />;
   if (moduleSlug === "galeria") return <AdminGallery />;
+  if (moduleSlug === "parceiros") return <AdminPartners />;
+  if (moduleSlug === "conteudo") return <AdminContent />;
+  if (moduleSlug === "auditoria") return <AdminAudit />;
+  if (moduleSlug === "leilao") return <AdminAuction />;
+  if (moduleSlug === "usuarios") return <AdminUsers />;
+  if (moduleSlug === "privacidade") return <AdminPrivacy />;
 
   return (
     <>

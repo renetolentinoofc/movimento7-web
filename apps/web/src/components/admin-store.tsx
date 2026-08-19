@@ -52,7 +52,10 @@ export function AdminStore() {
     }
   }, [router]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void load(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [load]);
 
   async function createProduct(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
