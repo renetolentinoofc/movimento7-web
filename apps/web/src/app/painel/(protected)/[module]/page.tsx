@@ -6,6 +6,7 @@ import { AdminEditions } from "@/components/admin-editions";
 import { AdminProfiles } from "@/components/admin-profiles";
 import { AdminRegistrations } from "@/components/admin-registrations";
 import { AdminStore } from "@/components/admin-store";
+import { AdminGallery } from "@/components/admin-gallery";
 import { AdminSystem } from "@/components/admin-system";
 import { PANEL_MODULE_DETAILS } from "@/lib/panel-modules";
 
@@ -25,6 +26,7 @@ export default async function PanelModulePage({
   if (moduleSlug === "comunicacao") return <AdminCommunications />;
   if (moduleSlug === "sistema") return <AdminSystem />;
   if (moduleSlug === "loja") return <AdminStore />;
+  if (moduleSlug === "galeria") return <AdminGallery />;
 
   return (
     <>
