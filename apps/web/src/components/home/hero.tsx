@@ -3,13 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./home.module.css";
 
-export function Hero() {
+export function Hero({ content = {} }: { content?: Record<string, unknown> }) {
+  const title = typeof content.title === "string" ? content.title : "Um movimento que transforma.";
+  const description = typeof content.description === "string"
+    ? content.description
+    : "O Movimento 7 é uma plataforma de desenvolvimento cultural que conecta pessoas, revela talentos e cria oportunidades por meio da arte, da cultura urbana, da beleza e do empreendedorismo.";
+  const titleParts = title.split(" ").reduce<string[][]>((parts, word) => {
+    const current = parts.at(-1) ?? [];
+    if (current.join(" ").length + word.length + 1 > 16) parts.push([word]);
+    else current.push(word);
+    return parts;
+  }, []);
   return <section id="sobre" className={styles.hero} aria-labelledby="hero-title">
     <div className={styles.heroCopy}>
       <div className={styles.heroCopyInner}>
         <p className={styles.kickerDark}>CULTURA, ARTE &amp; BELEZA</p>
-        <h1 id="hero-title"><span>Um movimento</span><span>que transforma.</span></h1>
-        <p>O Movimento 7 é uma plataforma de desenvolvimento cultural que conecta pessoas, revela talentos e cria oportunidades por meio da arte, da cultura urbana, da beleza e do empreendedorismo.</p>
+        <h1 id="hero-title">{titleParts.map((part) => <span key={part.join("-")}>{part.join(" ")}</span>)}</h1>
+        <p>{description}</p>
         <div className={styles.heroActions}>
           <Link className={styles.buttonDark} href="#programacao">Conheça o festival <ArrowRight aria-hidden /></Link>
           <Link className={styles.buttonOutlineDark} href="/loja">Conheça a coleção</Link>

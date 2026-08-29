@@ -3,12 +3,23 @@ const headers = {
   "Content-Type": "text/plain; charset=utf-8"
 };
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
-export function GET() {
-  return new Response("ok\n", { status: 200, headers });
+export async function GET() {
+  const origin = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:5000";
+  try {
+    const response = await fetch(`${origin}/api/v1/health/live`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (response.ok) return new Response("ok\n", { status: 200, headers });
+  } catch {
+    // Report dependency failure through the status code below.
+  }
+  return new Response("backend unavailable\n", { status: 503, headers });
 }
 
-export function HEAD() {
-  return new Response(null, { status: 200, headers });
+export async function HEAD() {
+  const response = await GET();
+  return new Response(null, { status: response.status, headers });
 }

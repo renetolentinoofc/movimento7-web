@@ -33,7 +33,7 @@ test("faz login e abre o painel", async ({ page, context }) => {
   });
   await page.goto("/painel/login");
   await page.getByLabel("E-mail").fill("admin@movimento7.com");
-  await page.getByLabel("Senha").fill("senha-segura-e2e");
+  await page.getByRole("textbox", { name: "Senha" }).fill("senha-segura-e2e");
   await page.getByRole("button", { name: "ENTRAR" }).click();
   await expect(page).toHaveURL(/\/painel$/);
   await expect(page.getByRole("heading", { name: "Visão geral" })).toBeVisible();
@@ -52,5 +52,5 @@ test("carrega a galeria do painel para o álbum selecionado", async ({ page, con
   await page.goto("/painel/galeria");
   await expect(page.getByRole("heading", { name: "Galeria" })).toBeVisible();
   await expect(page.getByText("Abertura").first()).toBeVisible();
-  await expect(page.getByText("Edição 2026")).toBeVisible();
+  await expect(page.getByLabel("Selecione o álbum")).toHaveValue("album-1");
 });

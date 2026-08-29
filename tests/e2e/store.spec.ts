@@ -50,7 +50,7 @@ test("conclui o fluxo de carrinho, cotação de frete e checkout", async ({ page
   await page.getByLabel("Rua").fill("Rua E2E");
   await page.getByLabel("Número").fill("10");
   await page.getByLabel("Bairro").fill("Centro");
-  await page.getByLabel("Cidade").fill("São Paulo");
+  await page.getByRole("textbox", { name: "Cidade" }).fill("São Paulo");
   await page.getByLabel("Li os termos, política de privacidade e informações de entrega.").check();
   await page.getByRole("button", { name: "CRIAR PEDIDO" }).click();
   await expect(page).toHaveURL(/\/pedido\/PED-E2E-001\?token=token-e2e$/);

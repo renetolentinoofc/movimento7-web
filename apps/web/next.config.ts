@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const apiOrigin = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:5000";
+const apiHostname = new URL(apiOrigin).hostname;
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
@@ -9,6 +10,15 @@ const nextConfig: NextConfig = {
   // 50 MB in the V8 heap.
   cacheMaxMemorySize: 0,
   poweredByHeader: false,
+  images: {
+    remotePatterns: [
+      { protocol: "http", hostname: apiHostname },
+      { protocol: "https", hostname: apiHostname },
+      { protocol: "https", hostname: "drive.google.com" },
+      { protocol: "https", hostname: "*.googleusercontent.com" },
+      { protocol: "https", hostname: "*.googleapis.com" },
+    ],
+  },
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
   experimental: {

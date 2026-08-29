@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MediaImage } from "@/components/media-image";
+import { AuctionBidForm } from "@/components/auction-bid-form";
 import { brl, type Envelope } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,7 @@ type Lot = {
   closes_at?: string;
   status: string;
   bidding_enabled: boolean;
+  terms_version: string;
   media: { url: string; alt: string; credit?: string; width?: number; height?: number }[];
   bid_history: { alias: string; amount_cents: number; created_at: string }[];
 };
@@ -56,7 +58,7 @@ export default async function LotPage({ params }: { params: Promise<{ slug: stri
         <p>Valor inicial: {brl(lot.starting_bid_cents)}</p>
         <p>Lance atual: {lot.current_bid_cents ? brl(lot.current_bid_cents) : "nenhum lance"}</p>
         {lot.bidding_enabled
-          ? <p className="card">O formulário só é exibido quando termos e feature flag forem habilitados.</p>
+          ? <AuctionBidForm lotId={lot.id} termsVersion={lot.terms_version} minimumCents={lot.current_bid_cents ? lot.current_bid_cents + lot.minimum_increment_cents : lot.starting_bid_cents} />
           : <div className="empty">Obra em exposição. Lances monetários não estão habilitados.</div>}
         <h2 style={{ fontSize: "2rem" }}>Histórico público</h2>
         {lot.bid_history.length

@@ -14,8 +14,12 @@
     "dev:web": "npm run dev --workspace @movimento7/web",
     "build": "npm run build --workspace @movimento7/web",
     "e2e": "playwright test",
+    "e2e:real": "bash scripts/e2e-real.sh",
     "lint": "npm run lint --workspace @movimento7/web",
     "typecheck": "npm run typecheck --workspace @movimento7/web",
     "test:web": "npm run test --workspace @movimento7/web"
+  },
+  "dependencies": {
+    "@mercadopago/sdk-react": "^1.0.7"
   }
 }

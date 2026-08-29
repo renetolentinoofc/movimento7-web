@@ -29,6 +29,12 @@ export type HomePartner = {
   website_url?: string | null;
 };
 
+export type SiteData = {
+  content: Record<string, unknown>;
+  settings: Record<string, unknown>;
+  social_links: { network: string; label: string; url: string }[];
+};
+
 const apiUrl = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:5000";
 const INTERNAL_ONLY_PRODUCT_SLUGS = new Set(["camiseta-movimento7"]);
 
@@ -58,15 +64,33 @@ async function load<T>(path: string): Promise<T[]> {
 }
 
 export async function loadHomeData() {
-  const [products, auctionLots, apiPartners] = await Promise.all([
+  const [products, auctionLots, apiPartners, site] = await Promise.all([
     load<HomeProduct>("products"),
     load<HomeAuctionLot>("auction-lots"),
-    load<HomePartner>("partners")
+    load<HomePartner>("partners"),
+    loadSite(),
   ]);
 
   return {
     products: products.filter(product => !INTERNAL_ONLY_PRODUCT_SLUGS.has(product.slug)).slice(0, 3),
     auctionLot: auctionLots[0] ?? null,
     partners: mergePartners(apiPartners),
+    site,
   };
+}
+
+export function contentText(content: Record<string, unknown>, key: string, fallback: string): string {
+  const value = content[key];
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
+export async function loadSite(): Promise<SiteData> {
+  try {
+    const response = await fetch(`${apiUrl}/api/v1/site`, { next: { revalidate: 60 } });
+    if (!response.ok) return { content: {}, settings: {}, social_links: [] };
+    const payload = await response.json() as Envelope<SiteData>;
+    return payload.data ?? { content: {}, settings: {}, social_links: [] };
+  } catch {
+    return { content: {}, settings: {}, social_links: [] };
+  }
 }

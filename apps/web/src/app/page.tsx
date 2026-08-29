@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const { products, auctionLot, partners } = await loadHomeData();
+  const { products, auctionLot, partners, site } = await loadHomeData();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://movimento7.com.br";
   const organization = {
     "@context": "https://schema.org",
@@ -41,7 +41,7 @@ export default async function Home() {
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
-    <Hero />
+    <Hero content={site.content["home.hero"] as Record<string, unknown> | undefined} />
     <BarberBattle />
     <RimaViva />
     <FeaturedProducts products={products} />
